@@ -1,0 +1,11 @@
+Git repository with Eclipse plugin bundles of the CDK modules and additionaly required libraries.
+
+Two main branches are maintained:
+
+* master := CDK master
+* cdk-jchempaint := CDK master + the CDK-JChemPaint patch
+
+If you need rendering and/or editing functionality, you need the latter branch.
+
+Additional branches may be present for application specific patches (to be decided at a later stage).
+
