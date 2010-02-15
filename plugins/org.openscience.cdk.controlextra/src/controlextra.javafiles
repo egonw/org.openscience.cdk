@@ -5,3 +5,6 @@ org/openscience/cdk/controller/undoredo/MakeReactantOrProductInNewReactionEdit.j
 org/openscience/cdk/controller/undoredo/MakeReactantOrProductInExistingReactionEdit.java
 org/openscience/cdk/controller/undoredo/ChangeIsotopeEdit.java
 org/openscience/cdk/controller/undoredo/LoadNewModelEdit.java
+org/openscience/cdk/controller/edit/AddSingleElectron.java
+org/openscience/cdk/controller/edit/RemoveSingleElectron.java
+org/openscience/cdk/controller/ChangeSingleElectronModule.java
