@@ -1,5 +1,4 @@
 /*  Copyright (C) 2009  Gilleain Torrance <gilleain@users.sf.net>
- *                2009  Arvid Berg <goglepox@users.sourceforge.net>
  *
  *  Contact: cdk-devel@lists.sourceforge.net
  *
@@ -27,6 +26,7 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.vecmath.Vector2d;
 import javax.vecmath.Point2d;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -52,15 +52,31 @@ public class AtomNumberGenerator implements IGenerator {
 
     private IGeneratorParameter<Color> textColor = new AtomNumberTextColor();
 
-        public AtomNumberGenerator() {}
+    Vector2d offset;
+
+	public AtomNumberGenerator() {
+	    offset = new Vector2d();
+	}
+
+	/**
+	 * Allows for drawing the atom number offset from the atom position.
+	 * @param offset vector in screen space.
+	 */
+	public AtomNumberGenerator(Vector2d offset) {
+	    this.offset = new Vector2d(offset);
+	}
 
 	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
 		ElementGroup numbers = new ElementGroup();
 		if (!model.drawNumbers()) return numbers;
 
+		Vector2d offset = new Vector2d(this.offset.x,-this.offset.y);
+		offset.scale( 1/model.getScale() );
+
 		int number = 1;
 		for (IAtom atom : ac.atoms()) {
-			Point2d p = atom.getPoint2d();
+			Point2d p = new Point2d(atom.getPoint2d());
+			p.add( offset );
 			numbers.add(
 					new TextElement(
 						p.x, p.y, String.valueOf(number),
@@ -75,5 +91,6 @@ public class AtomNumberGenerator implements IGenerator {
     public List<IGeneratorParameter<?>> getParameters() {
         return Arrays.asList( new IGeneratorParameter<?>[] {textColor} );
     }
+
 
 }
