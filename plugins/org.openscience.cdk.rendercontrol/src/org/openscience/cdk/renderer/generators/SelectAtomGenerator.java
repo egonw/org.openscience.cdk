@@ -29,11 +29,12 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
-import org.openscience.cdk.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator.Shape;
+import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 
@@ -42,13 +43,21 @@ import org.openscience.cdk.renderer.selection.IncrementalSelection;
  */
 public class SelectAtomGenerator implements IGenerator {
 
+    public static class SelectionShape extends
+    AbstractGeneratorParameter<Shape> {
+        public Shape getDefault() {
+            return Shape.SQUARE;
+        }
+    }
+    private IGeneratorParameter<Shape> selectionShape = new SelectionShape();
+    
     private boolean autoUpdateSelection = true;
 
     public SelectAtomGenerator() {}
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         Color selectionColor = model.getSelectedPartColor();
-        AtomShape shape = model.getSelectionShape();
+        Shape shape = selectionShape.getValue();
         IChemObjectSelection selection = model.getSelection();
         ElementGroup selectionElements = new ElementGroup();
 

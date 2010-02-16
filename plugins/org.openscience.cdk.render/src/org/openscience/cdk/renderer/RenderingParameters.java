@@ -34,7 +34,7 @@ public class RenderingParameters {
      * When atoms are selected or in compact mode, they will
      * be covered by a shape determined by this enumeration
      */
-    public enum AtomShape { OVAL, SQUARE };
+//    public enum AtomShape { OVAL, SQUARE };
     
     /**
      * The width of an arrow head
@@ -52,11 +52,6 @@ public class RenderingParameters {
     private double bondLength = 40.0;
 
     /**
-     * The width on screen of a bond
-     */
-    private double bondWidth = 1.0;
-
-    /**
      * The width on screen of an atom-atom mapping line
      */
     private double mappingLineWidth = 1.0;
@@ -68,20 +63,9 @@ public class RenderingParameters {
     private Color boundsColor = Color.LIGHT_GRAY;
 
     /**
-     * If true, atoms are displayed in a compact notation,
-     * as a colored square or circle, rather than as text
-     */
-    private boolean compact = false;
-
-    /**
      * The shape of the compact mode atom.
      */
-    private AtomShape compactShape = AtomShape.SQUARE;
-
-    /**
-     * The color to draw bonds if not other color is given.
-     */
-    private Color defaultBondColor = Color.BLACK;
+//    private AtomShape compactShape = AtomShape.SQUARE;
 
     private String fontName = "Arial";
 
@@ -96,14 +80,6 @@ public class RenderingParameters {
     private Color hoverOverColor = Color.lightGray;
 
     /**
-     * Determines whether structures should be drawn as Kekule structures, thus
-     * giving each carbon element explicitly, instead of not displaying the
-     * element symbol. Example C-C-C instead of /\.
-     */
-    private boolean kekuleStructure = false;
-
-
-    /**
      * The maximum distance on the screen the mouse pointer has to be to
      * highlight an element.
      */
@@ -112,16 +88,6 @@ public class RenderingParameters {
     private boolean highlightShapeFilled = false;
 
     private Color mappingColor = Color.gray;
-
-    /**
-     * Area on each of the four margins to keep white.
-     */
-    private double margin = 10;
-
-    /**
-     * The proportion of a ring bounds to use to draw the ring.
-     */
-    private double ringProportion = 0.35;
 
     /**
      * The factor to convert from model space to screen space.
@@ -133,30 +99,16 @@ public class RenderingParameters {
     /**
      * The shape to display over selected atoms
      */
-    private AtomShape selectionShape = AtomShape.SQUARE;
+//    private AtomShape selectionShape = AtomShape.SQUARE;
 
     /**
      * The radius on screen of the selection shape
      */
     private double selectionRadius = 3;
 
-    /**
-     * Determines whether rings should be drawn with a circle if they are
-     * aromatic.
-     */
-    private boolean showAromaticity = true;
-
-    private boolean showAromaticityInCDKStyle = false;
-
     private boolean showAtomAtomMapping = true;
 
     private boolean showAtomTypeNames = false;
-
-    /**
-     * Determines whether methyl carbons' symbols should be drawn explicit for
-     * methyl carbons. Example C/\C instead of /\.
-     */
-    private boolean showEndCarbons = false;
 
     /** Determines whether explicit hydrogens should be drawn. */
     private boolean showExplicitHydrogens = true;
@@ -196,42 +148,12 @@ public class RenderingParameters {
         this.highlightShapeFilled = highlightShapeFilled;
     }
 
-    public boolean isShowAromaticityInCDKStyle() {
-        return this.showAromaticityInCDKStyle;
-    }
-
-    public void setShowAromaticityInCDKStyle(boolean shouldShow) {
-        this.showAromaticityInCDKStyle = shouldShow;
-    }
-
     public double getWedgeWidth() {
         return wedgeWidth;
     }
 
     public void setWedgeWidth(double wedgeWidth) {
         this.wedgeWidth = wedgeWidth;
-    }
-
-    public double getRingProportion() {
-        return ringProportion;
-    }
-
-    public void setRingProportion(double ringProportion) {
-        this.ringProportion = ringProportion;
-    }
-
-    /**
-     * @return the shape to draw the atoms when in compact mode
-     */
-    public AtomShape getCompactShape() {
-        return compactShape;
-    }
-
-    /**
-     * @param compactShape the shape to draw the atoms when in compact mode
-     */
-    public void setCompactShape(AtomShape compactShape) {
-        this.compactShape = compactShape;
     }
 
     /**
@@ -254,22 +176,6 @@ public class RenderingParameters {
 
     public void setHighlightDistance(double highlightDistance) {
         this.highlightDistance = highlightDistance;
-    }
-
-    public Color getDefaultBondColor() {
-        return defaultBondColor;
-    }
-
-    public void setDefaultBondColor(Color defaultBondColor) {
-        this.defaultBondColor = defaultBondColor;
-    }
-
-    public AtomShape getSelectionShape() {
-        return this.selectionShape;
-    }
-
-    public void setSelectionShape(AtomShape selectionShape) {
-        this.selectionShape = selectionShape;
     }
 
 	public String getFontName() {
@@ -300,10 +206,6 @@ public class RenderingParameters {
         this.bondLength = bondLength;
     }
 
-    public double getBondWidth() {
-        return bondWidth;
-    }
-
     public double getMappingLineWidth() {
         return mappingLineWidth;
     }
@@ -332,24 +234,8 @@ public class RenderingParameters {
         return mappingColor;
     }
 
-    public double getMargin() {
-        return margin;
-    }
-
     public Color getSelectedPartColor() {
         return selectedPartColor;
-    }
-
-    public boolean isCompact() {
-        return compact;
-    }
-
-    public boolean isKekuleStructure() {
-        return kekuleStructure;
-    }
-
-    public boolean isShowAromaticity() {
-        return showAromaticity;
     }
 
     public boolean isShowAtomAtomMapping() {
@@ -358,10 +244,6 @@ public class RenderingParameters {
 
     public boolean isShowAtomTypeNames() {
         return showAtomTypeNames;
-    }
-
-    public boolean isShowEndCarbons() {
-        return showEndCarbons;
     }
 
     public boolean isShowExplicitHydrogens() {
@@ -396,18 +278,10 @@ public class RenderingParameters {
         this.bondDistance = bondDistance;
     }
 
-    public void setBondWidth(double bondWidth) {
-        this.bondWidth = bondWidth;
-    }
-
     public void setMappingLineWidth(double mappingLineWidth) {
         this.mappingLineWidth = mappingLineWidth;
     }
     
-    public void setCompact(boolean compact) {
-        this.compact = compact;
-    }
-
     public void setExternalHighlightColor(Color externalHighlightColor) {
         this.externalHighlightColor = externalHighlightColor;
     }
@@ -420,24 +294,12 @@ public class RenderingParameters {
         this.hoverOverColor = hoverOverColor;
     }
 
-    public void setKekuleStructure(boolean kekuleStructure) {
-        this.kekuleStructure = kekuleStructure;
-    }
-
     public void setMappingColor(Color mappingColor) {
         this.mappingColor = mappingColor;
     }
 
-    public void setMargin(double margin) {
-        this.margin = margin;
-    }
-
     public void setSelectedPartColor(Color selectedPartColor) {
         this.selectedPartColor = selectedPartColor;
-    }
-
-    public void setShowAromaticity(boolean showAromaticity) {
-        this.showAromaticity = showAromaticity;
     }
 
     public void setShowAtomAtomMapping(boolean showAtomAtomMapping) {
@@ -446,10 +308,6 @@ public class RenderingParameters {
 
     public void setShowAtomTypeNames(boolean showAtomTypeNames) {
         this.showAtomTypeNames = showAtomTypeNames;
-    }
-
-    public void setShowEndCarbons(boolean showEndCarbons) {
-        this.showEndCarbons = showEndCarbons;
     }
 
     public void setShowExplicitHydrogens(boolean showExplicitHydrogens) {

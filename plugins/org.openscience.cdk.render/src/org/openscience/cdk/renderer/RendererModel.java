@@ -39,7 +39,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.renderer.RenderingParameters.AtomShape;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
@@ -112,37 +111,12 @@ public class RendererModel implements Serializable, Cloneable {
         this.parameters.setHighlightShapeFilled(highlightShapeFilled);
     }
 
-    public boolean getShowAromaticityCDKStyle() {
-        return this.parameters.isShowAromaticityInCDKStyle();
-    }
-
-    public void setShowAromaticityCDKStyle(boolean showIt) {
-        this.parameters.setShowAromaticityInCDKStyle(showIt);
-        fireChange();
-    }
-
     public double getWedgeWidth() {
         return this.parameters.getWedgeWidth();
     }
 
     public void setWedgeWidth(double wedgeWidth) {
         this.parameters.setWedgeWidth(wedgeWidth);
-    }
-
-    public double getRingProportion() {
-        return this.parameters.getRingProportion();
-    }
-
-    public void setRingProportion(double ringProportion) {
-        this.parameters.setRingProportion(ringProportion);
-    }
-
-    public AtomShape getCompactShape() {
-        return this.parameters.getCompactShape();
-    }
-
-    public void setCompactShape(AtomShape compactShape) {
-        this.parameters.setCompactShape(compactShape);
     }
 
     public double getScale() {
@@ -159,14 +133,6 @@ public class RendererModel implements Serializable, Cloneable {
 
     public IChemObjectSelection getSelection() {
         return this.selection;
-    }
-
-    public RenderingParameters.AtomShape getSelectionShape() {
-        return this.parameters.getSelectionShape();
-    }
-
-    public void setSelectionShape(RenderingParameters.AtomShape selectionShape) {
-        this.parameters.setSelectionShape(selectionShape);
     }
 
 	/**
@@ -214,14 +180,6 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public void setFontManager(IFontManager.FontStyle fontStyle) {
         this.parameters.setFontStyle(fontStyle);
-    }
-
-    public boolean getIsCompact() {
-        return this.parameters.isCompact();
-    }
-
-    public void setIsCompact(boolean compact) {
-        this.parameters.setCompact(compact);
     }
 
     public boolean getUseAntiAliasing() {
@@ -287,26 +245,6 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public void setBondDistance(double bondDistance) {
         this.parameters.setBondDistance(bondDistance);
-        fireChange();
-    }
-
-    /**
-     * Returns the thickness of a bond line.
-     *
-     * @return the thickness of a bond line
-     */
-    public double getBondWidth() {
-        return this.parameters.getBondWidth();
-    }
-
-    /**
-     * Sets the thickness of a bond line.
-     *
-     * @param bondWidth
-     *            the thickness of a bond line
-     */
-    public void setBondWidth(double bondWidth) {
-        this.parameters.setBondWidth(bondWidth);
         fireChange();
     }
 
@@ -407,24 +345,6 @@ public class RendererModel implements Serializable, Cloneable {
         return this.parameters.isWillDrawNumbers();
     }
 
-    public boolean getKekuleStructure() {
-        return this.parameters.isKekuleStructure();
-    }
-
-    public void setKekuleStructure(boolean kekule) {
-        this.parameters.setKekuleStructure(kekule);
-        fireChange();
-    }
-
-    public boolean getShowEndCarbons() {
-        return this.parameters.isShowEndCarbons();
-    }
-
-    public void setShowEndCarbons(boolean showThem) {
-        this.parameters.setShowEndCarbons(showThem);
-        fireChange();
-    }
-
     public boolean getShowImplicitHydrogens() {
         return this.parameters.isShowImplicitHydrogens();
     }
@@ -440,15 +360,6 @@ public class RendererModel implements Serializable, Cloneable {
 
     public void setShowExplicitHydrogens(boolean showThem) {
         this.parameters.setShowExplicitHydrogens(showThem);
-        fireChange();
-    }
-
-    public boolean getShowAromaticity() {
-        return this.parameters.isShowAromaticity();
-    }
-
-    public void setShowAromaticity(boolean showIt) {
-        this.parameters.setShowAromaticity(showIt);
         fireChange();
     }
 
@@ -469,14 +380,6 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public boolean getDrawNumbers() {
         return this.parameters.isWillDrawNumbers();
-    }
-
-    public Color getDefaultBondColor() {
-        return this.parameters.getDefaultBondColor();
-    }
-
-    public void setDefaultBondColor(Color defaultBondColor) {
-        this.parameters.setDefaultBondColor(defaultBondColor);
     }
 
     /**
@@ -797,14 +700,6 @@ public class RendererModel implements Serializable, Cloneable {
         this.parameters.setShowAtomTypeNames(showAtomTypeNames);
     }
 
-    public double getMargin() {
-        return this.parameters.getMargin();
-    }
-
-    public void setMargin(double margin) {
-        this.parameters.setMargin(margin);
-    }
-
     public Color getBoundsColor() {
         return this.parameters.getBoundsColor();
     }
@@ -834,10 +729,9 @@ public class RendererModel implements Serializable, Cloneable {
 	 * @param param {@link IGeneratorParameter} to get the value of.
 	 * @return the {@link IGeneratorParameter} instance with the active value.
 	 */
-	public IGeneratorParameter<?> getRenderingParameter(
-	    Class<? extends IGeneratorParameter<?>> param) {
+	public <T extends IGeneratorParameter<?> >T getRenderingParameter(Class<T> param) {
 	    if (renderingParameters.containsKey(param.getClass().getName()))
-	        return renderingParameters.get(param.getClass().getName());
+	        return (T)renderingParameters.get(param.getClass().getName());
 	    try {
             return param.newInstance();
         } catch (InstantiationException exception) {
