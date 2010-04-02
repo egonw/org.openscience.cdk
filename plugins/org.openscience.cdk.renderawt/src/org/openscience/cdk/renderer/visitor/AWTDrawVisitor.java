@@ -57,6 +57,7 @@ import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.UseAntiAliasing;
 
 
 /**
@@ -512,7 +513,8 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
 
     public void setRendererModel(RendererModel rendererModel) {
         this.rendererModel = rendererModel;
-        if (rendererModel.getUseAntiAliasing()) {
+        if (rendererModel.getRenderingParameter(UseAntiAliasing.class)
+            .getValue()) {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 //            g.setStroke(new BasicStroke((int)rendererModel.getBondWidth()));

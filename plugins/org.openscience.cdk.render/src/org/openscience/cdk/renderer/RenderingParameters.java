@@ -23,10 +23,9 @@ package org.openscience.cdk.renderer;
 
 import java.awt.Color;
 
-import org.openscience.cdk.renderer.font.IFontManager;
-
 /**
  * @cdk.module render
+ * @cdk.githash
  */
 public class RenderingParameters {
 
@@ -40,11 +39,6 @@ public class RenderingParameters {
      * The width of an arrow head
      */
     private int arrowHeadWidth = 10;
-
-    /**
-     * The gap between double and triple bond lines on the screen
-     */
-    private double bondDistance = 2;
 
     /**
      * The length on screen of a typical bond
@@ -66,10 +60,6 @@ public class RenderingParameters {
      * The shape of the compact mode atom.
      */
 //    private AtomShape compactShape = AtomShape.SQUARE;
-
-    private String fontName = "Arial";
-
-    private IFontManager.FontStyle fontStyle = IFontManager.FontStyle.NORMAL;
 
     private Color externalHighlightColor = Color.orange;
 
@@ -121,8 +111,6 @@ public class RenderingParameters {
     private boolean showReactionBoxes = true;
 
     private boolean showTooltip = false;
-
-    private boolean useAntiAliasing = true;
 
     private boolean willDrawNumbers = false;
 
@@ -176,26 +164,6 @@ public class RenderingParameters {
 
     public void setHighlightDistance(double highlightDistance) {
         this.highlightDistance = highlightDistance;
-    }
-
-	public String getFontName() {
-        return this.fontName;
-    }
-
-    public void setFontName(String fontName) {
-        this.fontName = fontName;
-    }
-
-    public IFontManager.FontStyle getFontStyle() {
-        return this.fontStyle;
-    }
-
-    public void setFontStyle(IFontManager.FontStyle fontStyle) {
-        this.fontStyle = fontStyle;
-    }
-
-    public double getBondDistance() {
-        return bondDistance;
     }
 
     public double getBondLength() {
@@ -266,16 +234,8 @@ public class RenderingParameters {
         return showTooltip;
     }
 
-    public boolean isUseAntiAliasing() {
-        return useAntiAliasing;
-    }
-
     public boolean isWillDrawNumbers() {
         return willDrawNumbers;
-    }
-
-    public void setBondDistance(double bondDistance) {
-        this.bondDistance = bondDistance;
     }
 
     public void setMappingLineWidth(double mappingLineWidth) {
@@ -328,10 +288,6 @@ public class RenderingParameters {
 
     public void setShowTooltip(boolean showTooltip) {
         this.showTooltip = showTooltip;
-    }
-
-    public void setUseAntiAliasing(boolean useAntiAliasing) {
-        this.useAntiAliasing = useAntiAliasing;
     }
 
     public void setWillDrawNumbers(boolean willDrawNumbers) {

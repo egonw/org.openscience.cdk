@@ -39,16 +39,16 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
-import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 
 /**
  * Model for {@link Renderer} that contains settings for drawing objects.
  *
  * @cdk.module render
- * @cdk.svnrev $Revision$
+ * @cdk.githash
  */
 public class RendererModel implements Serializable, Cloneable {
 
@@ -65,14 +65,6 @@ public class RendererModel implements Serializable, Cloneable {
     /** Determines how much the image is zoomed into on. */
     private double zoomFactor = 1.0;
 
-    /**
-     * The color hash is used to color substructures.
-     *
-     * @see #getColorHash()
-     */
-    private Map<IChemObject, Color> colorHash =
-        new Hashtable<IChemObject, Color>();
-
     private Map<IAtom, String> toolTipTextMap = new HashMap<IAtom, String>();
 
     private IAtom highlightedAtom = null;
@@ -86,6 +78,20 @@ public class RendererModel implements Serializable, Cloneable {
     private IChemObjectSelection selection;
 
 	private Map<IAtom, IAtom> merge=new HashMap<IAtom, IAtom>();
+
+    /**
+     * The color hash is used to color substructures.
+     *
+     * @see #getColorHash()
+     */
+    public static class ColorHash extends
+    AbstractGeneratorParameter<Map<IChemObject, Color>> {
+        public Map<IChemObject, Color> getDefault() {
+            return new Hashtable<IChemObject, Color>();
+        }
+    }
+    private IGeneratorParameter<Map<IChemObject, Color>> colorHash =
+    	new ColorHash();
 
     public RendererModel() {
         this.parameters = new RenderingParameters();
@@ -146,51 +152,6 @@ public class RendererModel implements Serializable, Cloneable {
 		return merge;
 	}
 
-    /**
-     * Get the name of the font family (Arial, etc).
-     *
-     * @return the name of the font family as a String.
-     */
-    public String getFontName() {
-        return this.parameters.getFontName();
-    }
-
-    /**
-     * Set the name of the font family (Arial, etc).
-     */
-    public void setFontName(String fontName) {
-        this.parameters.setFontName(fontName);
-        fireChange();
-    }
-
-    /**
-     * Get the style of the font (Normal, Bold).
-     *
-     * @return the style of the font as a member of the IFontManager.FontStyle
-     *         enum
-     */
-    public IFontManager.FontStyle getFontStyle() {
-        return this.parameters.getFontStyle();
-    }
-
-    /**
-     * Set the style of font to use (Normal, Bold).
-     *
-     * @param fontStyle a member of the enum in {@link IFontManager}
-     */
-    public void setFontManager(IFontManager.FontStyle fontStyle) {
-        this.parameters.setFontStyle(fontStyle);
-    }
-
-    public boolean getUseAntiAliasing() {
-        return this.parameters.isUseAntiAliasing();
-    }
-
-    public void setUseAntiAliasing(boolean bool) {
-        this.parameters.setUseAntiAliasing(bool);
-        fireChange();
-    }
-
     public boolean getShowReactionBoxes() {
         return this.parameters.isShowReactionBoxes();
     }
@@ -226,26 +187,6 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public void setBondLength(double length) {
         this.parameters.setBondLength(length);
-    }
-
-    /**
-     * Returns the distance between two lines in a double or triple bond
-     *
-     * @return the distance between two lines in a double or triple bond
-     */
-    public double getBondDistance() {
-        return this.parameters.getBondDistance();
-    }
-
-    /**
-     * Sets the distance between two lines in a double or triple bond
-     *
-     * @param bondDistance
-     *            the distance between two lines in a double or triple bond
-     */
-    public void setBondDistance(double bondDistance) {
-        this.parameters.setBondDistance(bondDistance);
-        fireChange();
     }
 
     /**
@@ -464,26 +405,6 @@ public class RendererModel implements Serializable, Cloneable {
     }
 
     /**
-     * Returns the {@link Map} used for coloring substructures.
-     *
-     * @return the {@link Map} used for coloring substructures
-     */
-    public Map<IChemObject, Color> getColorHash() {
-        return this.colorHash;
-    }
-
-    /**
-     * Sets the {@link Map} used for coloring substructures
-     *
-     * @param colorHash
-     *            the {@link Map} used for coloring substructures
-     */
-    public void setColorHash(Map<IChemObject, Color> colorHash) {
-        this.colorHash = colorHash;
-        fireChange();
-    }
-
-    /**
      * Returns the atoms and bonds on the Renderer2D clipboard. If the clipboard
      * is empty it returns null. Primarily used for copy/paste.
      *
@@ -670,15 +591,17 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public void setExternalSelectedPart(IAtomContainer externalSelectedPart) {
         this.externalSelectedPart = externalSelectedPart;
-        getColorHash().clear();
+        Map<IChemObject, Color> colorHash =
+        	getRenderingParameter(ColorHash.class).getValue();
+        colorHash.clear();
         if(externalSelectedPart !=null) {
             for (int i = 0; i < externalSelectedPart.getAtomCount(); i++) {
-                getColorHash().put(externalSelectedPart.getAtom(i),
+                colorHash.put(externalSelectedPart.getAtom(i),
                                    this.getExternalHighlightColor());
             }
             Iterator<IBond> bonds = externalSelectedPart.bonds().iterator();
             while (bonds.hasNext()) {
-                getColorHash().put(bonds.next(), getExternalHighlightColor());
+            	colorHash.put(bonds.next(), getExternalHighlightColor());
             }
         }
         fireChange();

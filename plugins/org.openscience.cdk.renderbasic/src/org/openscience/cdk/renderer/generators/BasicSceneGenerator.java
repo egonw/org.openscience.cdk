@@ -28,6 +28,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.font.IFontManager.FontStyle;
 import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 
 /**
@@ -43,6 +44,15 @@ public class BasicSceneGenerator implements IGenerator {
     }
     private IGeneratorParameter<Color> backgroundColor = new BackGroundColor();
 
+    public static class UseAntiAliasing extends
+    AbstractGeneratorParameter<Boolean> {
+    	public Boolean getDefault() {
+    		return Boolean.TRUE;
+    	}
+    }
+    private IGeneratorParameter<Boolean> useAntiAliasing =
+    	new UseAntiAliasing();
+
     /**
      * Area on each of the four margins to keep white.
      */
@@ -54,6 +64,22 @@ public class BasicSceneGenerator implements IGenerator {
     }
     private IGeneratorParameter<Double> margin = new Margin();
 
+    public static class UsedFontStyle extends
+    AbstractGeneratorParameter<FontStyle> {
+    	public FontStyle getDefault() {
+    		return FontStyle.NORMAL;
+    	}
+    }
+    private IGeneratorParameter<FontStyle> fontStyle = new UsedFontStyle();
+
+    public static class FontName extends
+    AbstractGeneratorParameter<String> {
+    	public String getDefault() {
+    		return "Arial";
+    	}
+    }
+    private IGeneratorParameter<String> fontName = new FontName();
+
     public BasicSceneGenerator() {}
 
 	public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
@@ -64,7 +90,10 @@ public class BasicSceneGenerator implements IGenerator {
         return Arrays.asList(
             new IGeneratorParameter<?>[] {
                 backgroundColor,
-                margin
+                margin,
+                useAntiAliasing,
+                fontStyle,
+                fontName
             }
         );
     }

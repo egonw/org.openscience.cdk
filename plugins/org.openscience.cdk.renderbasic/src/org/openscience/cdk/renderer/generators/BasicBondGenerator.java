@@ -37,6 +37,7 @@ import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IRing;
 import org.openscience.cdk.interfaces.IRingSet;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.RendererModel.ColorHash;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.LineElement;
@@ -65,6 +66,17 @@ public class BasicBondGenerator implements IGenerator {
         }
     }
     private IGeneratorParameter<Double> bondWidth = new BondWidth();
+
+    /**
+     * The gap between double and triple bond lines on the screen.
+     */
+    public static class BondDistance extends
+    AbstractGeneratorParameter<Double> {
+        public Double getDefault() {
+            return 2.0;
+        }
+    }
+    private IGeneratorParameter<Double> bondDistance = new BondDistance();
 
     /**
      * The color to draw bonds if not other color is given.
@@ -136,7 +148,8 @@ public class BasicBondGenerator implements IGenerator {
 	        return overrideColor;
 	    }
 
-	    Color color = model.getColorHash().get(bond);
+	    Color color = model.getRenderingParameter(ColorHash.class)
+	    	.getValue().get(bond);
 	    if (color == null) {
 	        return model.getRenderingParameter(DefaultBondColor.class).getValue();
 	    } else {
@@ -212,7 +225,7 @@ public class BasicBondGenerator implements IGenerator {
 		Point2d p2 = bond.getAtom(1).getPoint2d();
 		Color color = this.getColorForBond(bond, model);
 		double bondWidth = this.getWidthForBond(bond, model);
-		double bondDistance = model.getBondDistance() / model.getScale();
+		double bondDistance = this.bondDistance.getValue() / model.getScale();
 		if (type == IBond.Order.SINGLE) {
 		    return new LineElement(p1.x, p1.y, p2.x, p2.y, bondWidth, color);
 		} else {
