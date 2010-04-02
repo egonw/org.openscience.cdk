@@ -21,6 +21,7 @@ org/openscience/cdk/io/iterator/IteratingPCCompoundASNReader.java
 org/openscience/cdk/io/iterator/IteratingPCCompoundXMLReader.java
 org/openscience/cdk/io/iterator/IteratingMDLReader.java
 org/openscience/cdk/io/ReaderFactory.java
+org/openscience/cdk/io/RGroupQueryWriter.java
 org/openscience/cdk/io/Mol2Reader.java
 org/openscience/cdk/io/PDBWriter.java
 org/openscience/cdk/io/Gaussian03Reader.java
@@ -31,6 +32,7 @@ org/openscience/cdk/io/pubchemxml/PubChemXMLHelper.java
 org/openscience/cdk/io/HINWriter.java
 org/openscience/cdk/io/SDFWriter.java
 org/openscience/cdk/io/ShelXReader.java
+org/openscience/cdk/io/RGroupQueryReader.java
 org/openscience/cdk/io/PCSubstanceXMLReader.java
 org/openscience/cdk/io/XYZWriter.java
 org/openscience/cdk/io/CIFReader.java

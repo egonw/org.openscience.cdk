@@ -1,10 +1,14 @@
+org/openscience/cdk/isomorphism/matchers/IRGroupQuery.java
 org/openscience/cdk/isomorphism/matchers/SymbolAndChargeQueryAtom.java
 org/openscience/cdk/isomorphism/matchers/OrderQueryBondOrderOnly.java
+org/openscience/cdk/isomorphism/matchers/RGroupList.java
 org/openscience/cdk/isomorphism/matchers/OrderQueryBond.java
 org/openscience/cdk/isomorphism/matchers/SymbolChargeIDQueryAtom.java
 org/openscience/cdk/isomorphism/matchers/QueryAtomContainer.java
 org/openscience/cdk/isomorphism/matchers/SymbolSetQueryAtom.java
+org/openscience/cdk/isomorphism/matchers/RGroupQuery.java
 org/openscience/cdk/isomorphism/matchers/InverseSymbolSetQueryAtom.java
+org/openscience/cdk/isomorphism/matchers/RGroup.java
 org/openscience/cdk/isomorphism/matchers/QueryAtomContainerCreator.java
 org/openscience/cdk/isomorphism/matchers/smarts/AromaticOrSingleQueryBond.java
 org/openscience/cdk/isomorphism/matchers/smarts/SMARTSBond.java
