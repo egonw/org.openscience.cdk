@@ -14,7 +14,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.openscience.cdk.standard,
  org.openscience.cdk.interfaces,
  org.openscience.cdk.libiocml,
- org.xmlcml.cmlxom,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.libio.cml,
  org.openscience.cdk.pdbcml
