@@ -21,7 +21,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.jama,
  org.3pq.jgrapht,
  javax.vecmath,
- net.bioclipse.xom,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.qsar.descriptors.protein,
  org.openscience.cdk.qsar.descriptors.molecular,
