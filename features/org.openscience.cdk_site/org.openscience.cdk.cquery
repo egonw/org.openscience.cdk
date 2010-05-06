@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cq:componentQuery xmlns:cq="http://www.eclipse.org/buckminster/CQuery-1.0" resourceMap="org.openscience.cdk.rmap">
+    <cq:rootRequest name="org.openscience.cdk_site" componentType="eclipse.feature"/>
+    <cq:advisorNode namePattern=".*" useWorkspace="false"/>
+</cq:componentQuery>

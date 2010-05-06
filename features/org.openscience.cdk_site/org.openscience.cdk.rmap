@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rmap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.eclipse.org/buckminster/RMap-1.0"
+	xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0" xmlns:mp="http://www.eclipse.org/buckminster/MavenProvider-1.0"
+	xmlns:pp="http://www.eclipse.org/buckminster/PDEMapProvider-1.0">
+	<property key="core.repo" value="${workspace.root}" mutable="true" />
+	<!-- Place your RMAP content here -->
+
+	<searchPath name="core_plugins">
+		<provider readerType="local" componentTypes="osgi.bundle,buckminster"
+			mutable="true" source="true">
+			<uri format="${core.repo}/plugins/{0}">
+				<bc:propertyRef key="buckminster.component" />
+			</uri>
+		</provider>
+		<provider readerType="local" componentTypes="osgi.bundle,buckminster"
+			mutable="true" source="true">
+			<uri format="${core.repo}/externals/{0}">
+				<bc:propertyRef key="buckminster.component" />
+			</uri>
+		</provider>
+		<provider readerType="local" componentTypes="eclipse.feature"
+			mutable="true" source="true">
+			<uri format="${core.repo}/features/{0}">
+				<bc:propertyRef key="buckminster.component" />
+			</uri>
+		</provider>
+	</searchPath>
+
+	<searchPath name="other">
+		<provider readerType="p2" componentTypes="osgi.bundle,eclipse.feature" mutable="false" source="false">
+			<uri format="http://download.eclipse.org/eclipse/updates/3.5?importType=binary"/>
+		</provider>
+	</searchPath>
+	
+	<searchPath name="xom">
+		<provider readerType="p2" componentTypes="osgi.bundle" mutable="false" source="false">
+			<uri format="file:/Users/arvid/Documents/Dev/p2/xomcml-site/?importType=binary" >
+			</uri>
+		</provider>
+		<provider readerType="local" componentTypes="osgi.bundle" mutable="false" source="false">
+			<uri format="file:/Users/arvid/Documents/targetPlatform/{0}{1}.jar">
+				<bc:propertyRef key="buckminster.component" />
+				<bc:constant value="-1.1" />
+			</uri>
+		</provider>
+		<provider readerType="local" componentTypes="osgi.bundle" mutable="false" source="false">
+			<uri format="file:/Users/arvid/Documents/targetPlatform/{0}-{1}.jar">
+				<bc:propertyRef key="buckminster.component" />
+				<bc:constant value="2.5-b1" />
+			</uri>
+		</provider>
+		<provider readerType="url" componentTypes="osgi.bundle" mutable="false" source="false">
+			<uri format="file:/Users/arvid/Documents/targetPlatform/org.cmlxom-2.5-b1.jar" />
+		</provider>
+	</searchPath>
+	
+	<locator searchPathRef="xom" pattern=".*" failOnError="false"/>
+	<locator searchPathRef="core_plugins" pattern=".*" failOnError="false"/>
+	<locator searchPathRef="other"/>
+
+
+</rmap>
