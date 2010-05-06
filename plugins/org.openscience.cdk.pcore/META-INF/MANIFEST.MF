@@ -20,3 +20,4 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.pharmacophore,
  org.openscience.cdk.pcore
+Import-Package: nu.xom
