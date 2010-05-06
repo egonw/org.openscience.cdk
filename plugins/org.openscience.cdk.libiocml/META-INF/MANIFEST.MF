@@ -21,3 +21,4 @@ Export-Package: org.openscience.cdk.io,
  org.openscience.cdk.io.cml,
  org.openscience.cdk.libio.cml,
  org.openscience.cdk.libiocml
+Import-Package: nu.xom, org.xmlcml.cml.base, org.xmlcml.cml.element
