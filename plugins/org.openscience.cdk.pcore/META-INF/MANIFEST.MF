@@ -17,7 +17,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.openscience.cdk.smarts,
  org.openscience.cdk.isomorphism,
  javax.vecmath,
- net.bioclipse.xom,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.pharmacophore,
  org.openscience.cdk.pcore

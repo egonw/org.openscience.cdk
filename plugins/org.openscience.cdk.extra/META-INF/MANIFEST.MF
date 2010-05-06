@@ -20,7 +20,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.openscience.cdk.smiles,
  org.jama,
  javax.vecmath,
- net.bioclipse.xom,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.graph,
  org.openscience.cdk.graph.matrix,

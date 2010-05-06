@@ -25,7 +25,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.3pq.jgrapht,
  org.omegahat.sjava,
  javax.vecmath,
- net.bioclipse.xom,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.qsar.descriptors.atomic,
  org.openscience.cdk.qsar.descriptors.atomic.data,
