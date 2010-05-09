@@ -12,4 +12,4 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.openscience.cdk.core,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.dict
-Import-Package: nu.xom;version="1.1.0"
+Import-Package: nu.xom

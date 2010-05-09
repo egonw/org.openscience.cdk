@@ -34,4 +34,4 @@ Export-Package: org.openscience.cdk.qsar,
  org.openscience.cdk.qsar.descriptors.data,
  org.openscience.cdk.config.data,
  org.openscience.cdk.qsarmolecular
-Import-Package: nu.xom;version="1.1"
+Import-Package: nu.xom
