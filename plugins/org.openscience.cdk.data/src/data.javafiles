@@ -38,4 +38,5 @@ org/openscience/cdk/ChemFile.java
 org/openscience/cdk/ReactionScheme.java
 org/openscience/cdk/RingSet.java
 org/openscience/cdk/PseudoAtom.java
+org/openscience/cdk/stereo/TetrahedralChirality.java
 org/openscience/cdk/MoleculeSet.java

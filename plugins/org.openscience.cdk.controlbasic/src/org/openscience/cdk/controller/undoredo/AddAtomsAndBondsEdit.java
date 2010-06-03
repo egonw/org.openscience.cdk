@@ -65,7 +65,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 	}
 
 	public void redo() {
-		IAtomContainer container = chemModel.getBuilder().newAtomContainer();
+		IAtomContainer container = chemModel.getBuilder().newInstance(IAtomContainer.class);
 		Iterator<IAtomContainer> containers = ChemModelManipulator.getAllAtomContainers(chemModel).iterator();
     	while (containers.hasNext()) {
     		container.add((IAtomContainer)containers.next());
@@ -79,7 +79,7 @@ public class AddAtomsAndBondsEdit implements IUndoRedoable {
 			container.addAtom(atom);
 		}
 		chemModelRelay.updateAtoms(container, container.atoms());
-		IMolecule molecule = container.getBuilder().newMolecule(container);
+		IMolecule molecule = container.getBuilder().newInstance(IMolecule.class,container);
 		IMoleculeSet moleculeSet = ConnectivityChecker
 				.partitionIntoMolecules(molecule);
 		chemModel.setMoleculeSet(moleculeSet);

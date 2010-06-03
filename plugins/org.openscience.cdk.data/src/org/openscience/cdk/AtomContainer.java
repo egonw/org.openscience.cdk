@@ -25,20 +25,18 @@ package org.openscience.cdk;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
 import org.openscience.cdk.interfaces.IChemObjectListener;
 import org.openscience.cdk.interfaces.IElectronContainer;
 import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.ISingleElectron;
+import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.IBond.Order;
 
 /**
@@ -118,10 +116,10 @@ public class AtomContainer extends ChemObject
 	 */
 	protected ISingleElectron[] singleElectrons;
 
-	/**
-	 * Internal list of atom parities.
-	 */
-	protected Map<IAtom, IAtomParity> atomParities;
+    /**
+     * Internal list of atom parities.
+     */
+    protected List<IStereoElement> stereoElements;
 
 
 	/**
@@ -150,7 +148,7 @@ public class AtomContainer extends ChemObject
 		this.lonePairs = new ILonePair[this.lonePairCount];
 		this.singleElectrons = new ISingleElectron[this.singleElectronCount];
 		
-		atomParities = new Hashtable<IAtom, IAtomParity>(atomCount/2);
+		stereoElements = new ArrayList<IStereoElement>(atomCount/2);
 
 		for (int f = 0; f < container.getAtomCount(); f++) {
 			atoms[f] = container.getAtom(f);
@@ -192,33 +190,22 @@ public class AtomContainer extends ChemObject
 		bonds = new IBond[bondCount];
 		lonePairs = new ILonePair[lpCount];
 		singleElectrons = new ISingleElectron[seCount];
-        atomParities = new Hashtable<IAtom, IAtomParity>(atomCount/2);
+		stereoElements = new ArrayList<IStereoElement>(atomCount/2);
 	}
 
-    /**
-     * Adds an AtomParity to this container. If a parity is already given for the
-     * affected Atom, it is overwritten.
-     *
-     * @param parity The new AtomParity for this container
-     * @see   #getAtomParity
-     */
-    public void addAtomParity(IAtomParity parity) {
-        atomParities.put(parity.getAtom(), parity);
+    /** {@inheritDoc} */
+    public void addStereoElement(IStereoElement element) {
+        stereoElements.add(element);
     }
 
-    /**
-     * Returns the atom parity for the given Atom. If no parity is associated
-     * with the given Atom, it returns null.
-     *
-     * @param  atom   Atom for which the parity must be returned
-     * @return The AtomParity for the given Atom, or null if that Atom does
-     *         not have an associated AtomParity
-     * @see    #addAtomParity
-     */
-    public IAtomParity getAtomParity(IAtom atom) {
-        return atomParities.get(atom);
+    /** {@inheritDoc} */
+    public Iterable<IStereoElement> stereoElements() {
+        return new Iterable<IStereoElement>() {
+            public Iterator<IStereoElement> iterator() {
+                return stereoElements.iterator();
+            }
+        };
     }
-    
 	/**
 	 *  Sets the array of atoms of this AtomContainer.
 	 *
@@ -1393,7 +1380,7 @@ public class AtomContainer extends ChemObject
 	public void addBond(int atom1, int atom2, IBond.Order order,
 			            IBond.Stereo stereo)
 	{
-		IBond bond = getBuilder().newBond(getAtom(atom1), getAtom(atom2), order, stereo);
+		IBond bond = getBuilder().newInstance(IBond.class,getAtom(atom1), getAtom(atom2), order, stereo);
 
 		if (contains(bond))
 		{
@@ -1419,7 +1406,7 @@ public class AtomContainer extends ChemObject
 	 */
 	public void addBond(int atom1, int atom2, IBond.Order order)
 	{
-		IBond bond = getBuilder().newBond(getAtom(atom1), getAtom(atom2), order);
+		IBond bond = getBuilder().newInstance(IBond.class,getAtom(atom1), getAtom(atom2), order);
 
 		if (bondCount >= bonds.length)
 		{
@@ -1438,7 +1425,7 @@ public class AtomContainer extends ChemObject
 	 */
 	public void addLonePair(int atomID)
 	{
-		ILonePair lonePair = getBuilder().newLonePair(atoms[atomID]);
+		ILonePair lonePair = getBuilder().newInstance(ILonePair.class,atoms[atomID]);
 		lonePair.addListener(this);
 		addLonePair(lonePair);
 		/* no notifyChanged() here because addElectronContainer() does 
@@ -1452,7 +1439,7 @@ public class AtomContainer extends ChemObject
 	 */
 	public void addSingleElectron(int atomID)
 	{
-		ISingleElectron singleElectron = getBuilder().newSingleElectron(atoms[atomID]);
+		ISingleElectron singleElectron = getBuilder().newInstance(ISingleElectron.class,atoms[atomID]);
 		singleElectron.addListener(this);
 		addSingleElectron(singleElectron);
 		/* no notifyChanged() here because addSingleElectron() does 
@@ -1568,10 +1555,10 @@ public class AtomContainer extends ChemObject
 				stringContent.append(", ").append(getSingleElectron(i).toString());
 			}
 		}
-		if (atomParities.size() > 0) {
-			stringContent.append(", AP:[#").append(atomParities.size());
-            for (IAtomParity iAtomParity : atomParities.values()) {
-                stringContent.append(", ").append(iAtomParity.toString());
+		if (stereoElements.size() > 0) {
+			stringContent.append(", ST:[#").append(stereoElements.size());
+            for (IStereoElement elements : stereoElements) {
+                stringContent.append(", ").append(elements.toString());
             }
 			stringContent.append(']');
 		}
@@ -1613,7 +1600,9 @@ public class AtomContainer extends ChemObject
 		for (int i = 0; i < getLonePairCount(); ++i) {
 			lp = getLonePair(i);
 			newLp = (ILonePair)lp.clone();
-			newLp.setAtom(clone.getAtom(getAtomNumber(lp.getAtom())));
+			if (lp.getAtom() != null) {
+			    newLp.setAtom(clone.getAtom(getAtomNumber(lp.getAtom())));
+			}
 			clone.addLonePair(newLp);
 		}
 		ISingleElectron se;
@@ -1621,7 +1610,9 @@ public class AtomContainer extends ChemObject
 		for (int i = 0; i < getSingleElectronCount(); ++i) {
 			se = getSingleElectron(i);
 			newSe = (ISingleElectron)se.clone();
-			newSe.setAtom(clone.getAtom(getAtomNumber(se.getAtom())));
+			if (se.getAtom() != null) {
+			    newSe.setAtom(clone.getAtom(getAtomNumber(se.getAtom())));
+			}
 			clone.addSingleElectron(newSe);
 		}
 //		for (int f = 0; f < getElectronContainerCount(); f++) {

@@ -1,0 +1,3 @@
+org/openscience/cdk/inchi/standard/InChIGeneratorFactory.java
+org/openscience/cdk/inchi/standard/InChIToStructure.java
+org/openscience/cdk/inchi/standard/InChIGenerator.java

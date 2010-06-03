@@ -8,6 +8,7 @@ org/openscience/cdk/renderer/generators/MappingGenerator.java
 org/openscience/cdk/renderer/generators/ExtendedAtomGenerator.java
 org/openscience/cdk/renderer/generators/BoundsGenerator.java
 org/openscience/cdk/renderer/generators/LonePairGenerator.java
+org/openscience/cdk/renderer/generators/ReactionSceneGenerator.java
 org/openscience/cdk/renderer/generators/AtomMassGenerator.java
 org/openscience/cdk/renderer/generators/RadicalGenerator.java
 org/openscience/cdk/renderer/generators/AtomNumberGenerator.java

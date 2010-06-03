@@ -5,6 +5,7 @@ import javax.vecmath.Vector2d;
 
 import org.openscience.cdk.renderer.IRenderer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.ZoomFactor;
 
 /**
  * @cdk.module controlbasic
@@ -44,7 +45,8 @@ public class ZoomModule extends ControllerModuleAdapter {
     
     private void zoom(double zoomFactor) {
         RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-        double zoom = model.getZoomFactor();
+        double zoom = model.getRenderingParameter(
+    	    	ZoomFactor.class).getValue();
         zoom = zoom * zoomFactor;
         if (zoom < .1 && zoom > 100)
             return;

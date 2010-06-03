@@ -70,7 +70,7 @@ public class LinkedSelection implements IChemObjectSelection {
     }
 
     public IAtomContainer getConnectedAtomContainer() {
-        return selected.getBuilder().newAtomContainer( selected );
+        return selected.getBuilder().newInstance(IAtomContainer.class, selected );
     }
 
     public boolean isFilled() {
@@ -92,7 +92,7 @@ public class LinkedSelection implements IChemObjectSelection {
                 selected = getRelevantAtomContainer( parts, bond );
             }
             else if (start instanceof IAtomContainer) {
-                IAtomContainer result = chemModel.getBuilder().newAtomContainer();
+                IAtomContainer result = chemModel.getBuilder().newInstance(IAtomContainer.class);
                 container = chemModel.getMoleculeSet().getAtomContainer( 0 );
                 IChemModel parts = getParts( container );
                 for(IAtom atom:((IAtomContainer)start).atoms()) {
@@ -104,7 +104,7 @@ public class LinkedSelection implements IChemObjectSelection {
     
     private IChemModel getParts(IAtomContainer container) {
         IMoleculeSet molecules = partitionIntoMolecules(container);
-        IChemModel parts = container.getBuilder().newChemModel();
+        IChemModel parts = container.getBuilder().newInstance(IChemModel.class);
         parts.setMoleculeSet( molecules );
         return parts;
     }

@@ -59,7 +59,7 @@ public class LogicalSelection implements IChemObjectSelection {
 
     public IAtomContainer getConnectedAtomContainer() {
         if (this.chemModel != null) {
-            IAtomContainer ac = this.chemModel.getBuilder().newAtomContainer();
+            IAtomContainer ac = this.chemModel.getBuilder().newInstance(IAtomContainer.class);
             for (IAtomContainer other : 
                 ChemModelManipulator.getAllAtomContainers(chemModel)) {
                 ac.add(other);
@@ -84,8 +84,8 @@ public class LogicalSelection implements IChemObjectSelection {
     }
     
     public void select(IAtomContainer atomContainer) {
-        this.chemModel = atomContainer.getBuilder().newChemModel();
-        IMoleculeSet molSet = atomContainer.getBuilder().newMoleculeSet();
+        this.chemModel = atomContainer.getBuilder().newInstance(IChemModel.class);
+        IMoleculeSet molSet = atomContainer.getBuilder().newInstance(IMoleculeSet.class);
         molSet.addAtomContainer(atomContainer);
         this.chemModel.setMoleculeSet(molSet);
     }

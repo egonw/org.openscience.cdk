@@ -58,7 +58,7 @@ public class AddAtom extends AbstractEdit implements IEdit {
     }
     public void redo() {
         if(addedAtom==null)
-            addedAtom = model.getBuilder().newAtom( symbol, position );
+            addedAtom = model.getBuilder().newInstance(IAtom.class, symbol, position );
         model.addAtom( addedAtom );
         updateHydrogenCount( new IAtom[] {addedAtom} );
     }

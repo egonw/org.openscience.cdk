@@ -34,6 +34,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.generators.BasicAtomGenerator.Shape;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
@@ -64,7 +65,8 @@ public class SelectAtomGenerator implements IGenerator {
         if(selection==null)
         	return selectionElements;
         if (this.autoUpdateSelection || selection.isFilled()) {
-            double r = model.getSelectionRadius() / model.getScale();
+            double r = model.getSelectionRadius() /
+                model.getRenderingParameter(Scale.class).getValue();
 
             double d = 2 * r;
             IAtomContainer selectedAC = selection.getConnectedAtomContainer();

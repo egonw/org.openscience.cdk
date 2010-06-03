@@ -95,7 +95,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
                                                       closestAtom,
                                                       closestBond );
         if(singleSelection == null) {
-                source = getBuilder().newAtom( "C", new Point2d(worldCoord) );
+                source = getBuilder().newInstance(IAtom.class, "C", new Point2d(worldCoord) );
                 newSource = true;
         } else if(singleSelection instanceof IAtom ) {
             source =  (IAtom) singleSelection;
@@ -140,13 +140,15 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             dest = null;
         }else if (merge != null) {
             // set bond
-            chemModelRelay.addPhantomBond( getBuilder().newBond(source,merge) );
+            chemModelRelay.addPhantomBond(
+            	getBuilder().newInstance(IBond.class,source,merge)
+            );
             dest = null;
 
         }else {
             dest = roundAngle( start, worldCoordTo );
-            IAtom atom = getBuilder().newAtom( "C", dest );
-            IBond bond = getBuilder().newBond( source,atom );
+            IAtom atom = getBuilder().newInstance(IAtom.class, "C", dest );
+            IBond bond = getBuilder().newInstance(IBond.class, source,atom );
             chemModelRelay.addPhantomBond( bond );
             // update phantom
         }

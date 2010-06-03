@@ -38,13 +38,14 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 import org.openscience.cdk.validate.ProblemMarker;
 
 /**
  * @cdk.module renderbasic
  */
-public class BasicAtomGenerator implements IGenerator {
+public class BasicAtomGenerator implements IAtomContainerGenerator {
 
     public static class AtomColor extends
         AbstractGeneratorParameter<Color> {
@@ -69,6 +70,15 @@ public class BasicAtomGenerator implements IGenerator {
         }
     }
     private IGeneratorParameter<Boolean> colorByType = new ColorByType();
+
+    public static class ShowExplicitHydrogens extends
+    AbstractGeneratorParameter<Boolean> {
+    	public Boolean getDefault() {
+    		return Boolean.TRUE;
+    	}
+    }
+    private IGeneratorParameter<Boolean> showExplicitHydrogens =
+    	new ShowExplicitHydrogens();
 
     public static class AtomRadius extends
         AbstractGeneratorParameter<Double> {
@@ -140,7 +150,7 @@ public class BasicAtomGenerator implements IGenerator {
 	}
 	
 	public boolean invisibleHydrogen(IAtom atom, RendererModel model) {
-	    return isHydrogen(atom) && !model.getShowExplicitHydrogens();
+	    return isHydrogen(atom) && !showExplicitHydrogens.getValue();
 	}
 	
 	public boolean invisibleCarbon(
@@ -188,7 +198,8 @@ public class BasicAtomGenerator implements IGenerator {
 	public IRenderingElement generateCompactElement(
 	        IAtom atom, RendererModel model) {
 	    Point2d p = atom.getPoint2d();
-	    double r = atomRadius.getValue() / model.getScale();
+	    double r = atomRadius.getValue() /
+	       model.getRenderingParameter(Scale.class).getValue();
 	    double d = 2 * r;
 	    if (compactShape.getValue() == Shape.SQUARE) {
     	    return new RectangleElement(

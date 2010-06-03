@@ -28,6 +28,8 @@ import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HoverOverColor;
 
 /**
  * @cdk.module rendercontrol
@@ -38,7 +40,9 @@ public class HighlightBondGenerator extends BasicBondGenerator
     public HighlightBondGenerator() {}
     
     private boolean shouldHighlight(IBond bond, RendererModel model) {
-        return !super.bindsHydrogen(bond) || model.getShowExplicitHydrogens();
+        return !super.bindsHydrogen(bond) || model.getRenderingParameter(
+			BasicAtomGenerator.ShowExplicitHydrogens.class
+		).getValue();
     }
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
@@ -46,8 +50,10 @@ public class HighlightBondGenerator extends BasicBondGenerator
         if (bond != null && shouldHighlight(bond, model)) {
             super.ringSet = super.getRingSet(ac);
             
-            double r = model.getHighlightDistance() / model.getScale();
-            Color hColor = model.getHoverOverColor();
+            double r = model.getHighlightDistance() /
+                       model.getRenderingParameter(Scale.class).getValue();
+            Color hColor = model.getRenderingParameter(HoverOverColor.class).
+            	getValue();
             Point2d p = bond.get2DCenter();
             boolean filled = model.getHighlightShapeFilled();
             return new OvalElement(p.x, p.y, r, filled, hColor);

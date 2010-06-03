@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CDK plugin
+Bundle-SymbolicName: org.openscience.cdk.smsd;singleton:=true
+Bundle-Version: 1.3.5.0bioclipse1
+Bundle-Vendor: The Chemistry Development Kit Project
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.openscience.cdk.smsd.Activator
+Bundle-ClassPath: .
+Require-Bundle: org.openscience.cdk.annotation,
+ org.openscience.cdk.interfaces,
+ org.openscience.cdk.core,
+ org.openscience.cdk.standard,
+ org.openscience.cdk.data,
+ org.openscience.cdk.io,
+ org.openscience.cdk.sdg,
+ org.openscience.cdk.smiles,
+ javax.vecmath,
+ org.eclipse.core.runtime
+Export-Package: org.openscience.cdk.smsd.interfaces,
+ org.openscience.cdk.smsd.tools,
+ org.openscience.cdk.smsd.helper,
+ org.openscience.cdk.smsd,
+ org.openscience.cdk.smsd.filters,
+ org.openscience.cdk.smsd.factory,
+ org.openscience.cdk.smsd.algorithm.single,
+ org.openscience.cdk.smsd.algorithm.cdk,
+ org.openscience.cdk.smsd.algorithm.vflib.builder,
+ org.openscience.cdk.smsd.algorithm.vflib,
+ org.openscience.cdk.smsd.algorithm.vflib.interfaces,
+ org.openscience.cdk.smsd.algorithm.vflib.map,
+ org.openscience.cdk.smsd.algorithm.vflib.query,
+ org.openscience.cdk.smsd.algorithm.vflib.validator,
+ org.openscience.cdk.smsd.algorithm.mcgregor,
+ org.openscience.cdk.smsd.algorithm.mcsplus,
+ org.openscience.cdk.smsd.global,
+ org.openscience.cdk.normalize

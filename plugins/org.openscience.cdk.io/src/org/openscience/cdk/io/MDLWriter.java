@@ -172,8 +172,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
 				writeChemFile((IChemFile)object);
 				return;
 			} else if (object instanceof IChemModel) {
-				IChemFile file = object.getBuilder().newChemFile();
-				IChemSequence sequence = object.getBuilder().newChemSequence();
+				IChemFile file = object.getBuilder().newInstance(IChemFile.class);
+				IChemSequence sequence = object.getBuilder().newInstance(IChemSequence.class);
 				sequence.addChemModel((IChemModel)object);
 				file.addChemSequence(sequence);
 				writeChemFile((IChemFile)file);
@@ -192,7 +192,7 @@ public class MDLWriter extends DefaultChemObjectWriter {
 	}
 	
 	private void writeChemFile(IChemFile file) throws Exception {
-	    IAtomContainer bigPile = file.getBuilder().newAtomContainer();
+	    IAtomContainer bigPile = file.getBuilder().newInstance(IAtomContainer.class);
 		for (IAtomContainer container :
 		     ChemFileManipulator.getAllAtomContainers(file)) {
 		    bigPile.add(container);
@@ -300,7 +300,23 @@ public class MDLWriter extends DefaultChemObjectWriter {
         	}else{
         		line += formatMDLString(container.getAtom(f).getSymbol(), 3);
         	}
-        	line += " 0  0  0  0  0  0  0  0  0  0  0  0";
+        	line += " 0  0  0  0  0";
+        	//valence 0 is defined as 15 in mol files
+        	if(atom.getValency()==(Integer)CDKConstants.UNSET)
+        		line += formatMDLInt(0, 3);
+        	else if(atom.getValency()==0)
+        		line += formatMDLInt(15, 3);
+        	else
+        		line += formatMDLInt(atom.getValency(), 3);
+        	line += "  0  0  0";
+        	
+        	if (container.getAtom(f).getProperty(CDKConstants.ATOM_ATOM_MAPPING) != null) {
+        	    int value = ((Integer)container.getAtom(f).getProperty(CDKConstants.ATOM_ATOM_MAPPING)).intValue();
+        	    line += formatMDLInt(value, 3);
+       	    } else {
+        	    line += formatMDLInt(0, 3);
+        	}
+      	    line += "  0  0";
         	writer.write(line);
         	writer.newLine();
         }
@@ -314,7 +330,8 @@ public class MDLWriter extends DefaultChemObjectWriter {
         		logger.warn("Skipping bond with more/less than two atoms: " + bond);
         	} else {
         		if (bond.getStereo() == IBond.Stereo.UP_INVERTED || 
-        				bond.getStereo() == IBond.Stereo.DOWN_INVERTED) {
+        				bond.getStereo() == IBond.Stereo.DOWN_INVERTED ||
+        				bond.getStereo() == IBond.Stereo.UP_OR_DOWN_INVERTED) {
         			// turn around atom coding to correct for inv stereo
         			line = formatMDLInt(container.getAtomNumber(bond.getAtom(1)) + 1,3);
         			line += formatMDLInt(container.getAtomNumber(bond.getAtom(0)) + 1,3);
@@ -340,6 +357,9 @@ public class MDLWriter extends DefaultChemObjectWriter {
         		case UP_OR_DOWN:
         			line += "4";
         			break;
+                case UP_OR_DOWN_INVERTED:
+                    line += "4";
+                    break;
            		case E_OR_Z:
           			line += "3";
           			break;
@@ -349,6 +369,20 @@ public class MDLWriter extends DefaultChemObjectWriter {
         		line += "  0  0  0 ";
         		writer.write(line);
         		writer.newLine();
+        	}
+        }
+        
+        // Write Atom Value
+        for (int i = 0; i < container.getAtomCount(); i++) {
+        	IAtom atom = container.getAtom(i);
+        	if(atom.getProperty(CDKConstants.COMMENT)!=null 
+        	&& atom.getProperty(CDKConstants.COMMENT) instanceof String
+        	&& !((String)atom.getProperty(CDKConstants.COMMENT)).trim().equals("") ) {
+                writer.write("V  ");
+                writer.write(formatMDLInt(i+1,3));
+                writer.write(" ");
+                writer.write((String)atom.getProperty(CDKConstants.COMMENT));
+                writer.newLine();
         	}
         }
 

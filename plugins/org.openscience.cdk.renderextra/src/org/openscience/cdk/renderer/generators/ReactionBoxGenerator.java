@@ -18,7 +18,10 @@
  */
 package org.openscience.cdk.renderer.generators;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.renderer.Renderer;
@@ -27,6 +30,9 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.RectangleElement;
 import org.openscience.cdk.renderer.elements.TextElement;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator.BondLength;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.ReactionSceneGenerator.ShowReactionBoxes;
 
 /**
  * Generate the symbols for radicals.
@@ -38,27 +44,38 @@ import org.openscience.cdk.renderer.elements.TextElement;
 public class ReactionBoxGenerator implements IReactionGenerator {
 
 	public IRenderingElement generate(IReaction reaction, RendererModel model) {
-		if (!model.getShowReactionBoxes())
+		if (!model.getRenderingParameter(ShowReactionBoxes.class).getValue())
 			return null;
-		double d = model.getBondLength() / model.getScale();
+		double d = model.getRenderingParameter(BondLength.class)
+    		.getValue() / model.getRenderingParameter(Scale.class).getValue();
 		Rectangle2D totalBounds = Renderer.calculateBounds(reaction);
         if (totalBounds == null) return null;
         
         ElementGroup diagram = new ElementGroup();
-        diagram.add(new RectangleElement(totalBounds.getMinX()-d,
-                                    totalBounds.getMinY()-d,
-                                    totalBounds.getMaxX()+d,
-                                    totalBounds.getMaxY()+d,
-                                    model.getForeColor()));
+        Color foregroundColor = model.getRenderingParameter(
+            BasicSceneGenerator.ForegroundColor.class).getValue();
+        diagram.add(new RectangleElement(
+        	totalBounds.getMinX()-d,
+            totalBounds.getMinY()-d,
+            totalBounds.getMaxX()+d,
+            totalBounds.getMaxY()+d,
+            foregroundColor
+        ));
         if (reaction.getID() != null) {
-        	diagram.add(new TextElement((totalBounds.getMinX()
-        	                            +totalBounds.getMaxX())/2, 
-        	                            totalBounds.getMinY()-d, 
-        	                            reaction.getID(), 
-        	                            model.getForeColor()));
+        	diagram.add(new TextElement(
+        		(totalBounds.getMinX()+totalBounds.getMaxX())/2, 
+        		totalBounds.getMinY()-d, 
+        		reaction.getID(), 
+        		foregroundColor
+        	));
         }
         return diagram;
 	}
 
-	
+	public List<IGeneratorParameter<?>> getParameters() {
+        return Arrays.asList(
+            new IGeneratorParameter<?>[] {
+            }
+        );
+    }
 }

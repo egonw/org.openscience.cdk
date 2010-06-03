@@ -63,9 +63,9 @@ public class CreateBond extends AbstractEdit implements IEdit{
     public void redo() {
 
         if(firstAtom==null && secondAtom ==null && bond==null) {
-            firstAtom = model.getBuilder().newAtom( "C", first );
-            secondAtom = model.getBuilder().newAtom( "C", second );
-            bond = model.getBuilder().newBond( firstAtom, secondAtom );
+            firstAtom = model.getBuilder().newInstance(IAtom.class, "C", first );
+            secondAtom = model.getBuilder().newInstance(IAtom.class, "C", second );
+            bond = model.getBuilder().newInstance(IBond.class, firstAtom, secondAtom );
         }
          model.addAtom( firstAtom );
          model.addAtom( secondAtom );

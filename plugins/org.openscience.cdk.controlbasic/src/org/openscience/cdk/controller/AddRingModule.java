@@ -123,7 +123,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         if(ring==null) {
             bondLength = getBondLengthAverage( getModel() );
             if(Double.isNaN( bondLength ) || bondLength == 0) bondLength = 1.4;
-            ring = getModel().getBuilder().newRing(ringSize, "C");
+            ring = getModel().getBuilder().newInstance(IRing.class, ringSize, "C");
             if(addingBenzene)
                 makeRingAromatic( ring );
             for(IBond bond:ring.bonds()){
@@ -135,7 +135,7 @@ public class AddRingModule extends ControllerModuleAdapter {
         IBond bond = chemModelRelay.getRenderModel().getHighlightedBond();
         IAtom atom = chemModelRelay.getRenderModel().getHighlightedAtom();
         if(bond!=null) {
-            IAtomContainer ac = bond.getBuilder().newAtomContainer();
+            IAtomContainer ac = bond.getBuilder().newInstance(IAtomContainer.class);
             IBond ringBond = ring.getBond( 0 );
             for(int i=0;i<2;i++) {
                 Point2d atomPos = new Point2d(bond.getAtom( i ).getPoint2d());
@@ -160,7 +160,7 @@ public class AddRingModule extends ControllerModuleAdapter {
             ringPlacer.placeFusedRing( ring, ac, acCenter, normal, bondLength );
         } else if (atom!=null){
             Point2d ringCenter = GeometryTools.get2DCenter( ring );
-            IAtomContainer ac = atom.getBuilder().newAtomContainer();
+            IAtomContainer ac = atom.getBuilder().newInstance(IAtomContainer.class);
             IAtom ringAtom = ring.getAtom( 0 );
             ringAtom.setPoint2d( new Point2d(atom.getPoint2d()) );
             ac.addAtom( ringAtom );

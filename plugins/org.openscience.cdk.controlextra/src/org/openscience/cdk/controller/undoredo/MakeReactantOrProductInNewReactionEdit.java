@@ -23,22 +23,12 @@
  */
 package org.openscience.cdk.controller.undoredo;
 
-import java.util.Iterator;
-
-import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
-import org.openscience.cdk.controller.IControllerModel;
-import org.openscience.cdk.graph.ConnectivityChecker;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomType;
-import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemModel;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
-import org.openscience.cdk.tools.CDKHydrogenAdder;
-import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
-import org.openscience.cdk.tools.manipulator.ChemModelManipulator;
+import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.tools.manipulator.ReactionSetManipulator;
 
 /**
@@ -78,23 +68,23 @@ public class MakeReactantOrProductInNewReactionEdit implements IUndoRedoable {
 
 	public void redo() {
 		chemModel.getMoleculeSet().removeAtomContainer(movedContainer);
-		IReaction reaction = chemModel.getBuilder().newReaction();
+		IReaction reaction = chemModel.getBuilder().newInstance(IReaction.class);
 		reaction.setID(reactionID);
-		IMolecule mol=chemModel.getBuilder().newMolecule(movedContainer);
+		IMolecule mol=chemModel.getBuilder().newInstance(IMolecule.class, movedContainer);
 		mol.setID(movedContainer.getID());
 		if(reactantOrProduct)
 			reaction.addReactant(mol);
 		else
 			reaction.addProduct(mol);
 		if(chemModel.getReactionSet()==null)
-			chemModel.setReactionSet(chemModel.getBuilder().newReactionSet());
+			chemModel.setReactionSet(chemModel.getBuilder().newInstance(IReactionSet.class));
 		chemModel.getReactionSet().addReaction(reaction);
 		chemModel.getMoleculeSet().removeAtomContainer(oldContainer);
 	}
 
 	public void undo() {
 		if(chemModel.getMoleculeSet()==null)
-			chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
+			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(oldContainer);
 		chemModel.getReactionSet().removeReaction(ReactionSetManipulator.getReactionByAtomContainerID(chemModel.getReactionSet(), movedContainer.getID()));
 	}

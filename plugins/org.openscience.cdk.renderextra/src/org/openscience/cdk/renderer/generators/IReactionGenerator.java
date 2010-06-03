@@ -29,7 +29,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
  *
  * @cdk.module renderextra
  */
-public interface IReactionGenerator {
+public interface IReactionGenerator extends IGenerator {
     
     public IRenderingElement generate(IReaction reaction, RendererModel model);
 

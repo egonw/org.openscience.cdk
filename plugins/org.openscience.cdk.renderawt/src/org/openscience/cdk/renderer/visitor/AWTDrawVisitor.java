@@ -57,7 +57,9 @@ import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.font.IFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGeneratorParameter;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.UseAntiAliasing;
+import org.openscience.cdk.renderer.generators.ReactionSceneGenerator.ArrowHeadWidth;
 
 
 /**
@@ -110,9 +112,11 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     }
 
     public void visit(ArrowElement line) {
+    	double scale = this.rendererModel.getRenderingParameter(
+            Scale.class).getValue();
         Stroke savedStroke = this.g.getStroke();
         
-        int w = (int) (line.width * this.rendererModel.getScale());
+        int w = (int) (line.width * scale);
         if (strokeMap.containsKey(w)) {
             this.g.setStroke(strokeMap.get(w));
         } else {
@@ -125,7 +129,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         int[] a = this.transformPoint(line.x1, line.y1);
         int[] b = this.transformPoint(line.x2, line.y2);
         this.g.drawLine(a[0], a[1], b[0], b[1]);
-        double aW = rendererModel.getArrowHeadWidth() / rendererModel.getScale();
+        double aW = rendererModel.getRenderingParameter(
+        	ArrowHeadWidth.class
+        ).getValue() / scale;
         if(line.direction){
 	        int[] c = this.transformPoint(line.x1-aW, line.y1-aW);
 	        int[] d = this.transformPoint(line.x1-aW, line.y1+aW);
@@ -144,7 +150,8 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
     public void visit(LineElement line) {
         Stroke savedStroke = this.g.getStroke();
         
-        int w = (int) (line.width * this.rendererModel.getScale());
+        int w = (int) (line.width * this.rendererModel.getRenderingParameter(
+            	Scale.class).getValue());
         if (strokeMap.containsKey(w)) {
             this.g.setStroke(strokeMap.get(w));
         } else {
@@ -215,7 +222,9 @@ public class AWTDrawVisitor extends AbstractAWTDrawVisitor {
         Vector2d normal = 
             new Vector2d(wedge.y1 - wedge.y2, wedge.x2 - wedge.x1);
         normal.normalize();
-        normal.scale(rendererModel.getWedgeWidth() / rendererModel.getScale());  
+        normal.scale(rendererModel.getWedgeWidth() /
+        		rendererModel.getRenderingParameter(
+        	        	Scale.class).getValue());  
         
         // make the triangle corners
         Point2d vertexA = new Point2d(wedge.x1, wedge.y1);

@@ -64,7 +64,7 @@ public class SetSymbol extends AbstractEdit{
     public void redo() {
         oldSymbol = oldAtom.getSymbol();
         if(oldAtom instanceof IPseudoAtom) {
-            newAtom = oldAtom.getBuilder().newAtom(symbol, oldAtom.getPoint2d());
+            newAtom = oldAtom.getBuilder().newInstance(IAtom.class,symbol, oldAtom.getPoint2d());
             replaceAtomByAtom( model, oldAtom, newAtom );
             updateHydrogenCount( newAtom );
         }

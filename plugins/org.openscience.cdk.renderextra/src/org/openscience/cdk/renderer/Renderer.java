@@ -39,11 +39,14 @@ import org.openscience.cdk.interfaces.IReactionSet;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.font.IFontManager;
-import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.IAtomContainerGenerator;
 import org.openscience.cdk.renderer.generators.IReactionGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator.BondLength;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.FontName;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Margin;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.UsedFontStyle;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator.ZoomFactor;
 import org.openscience.cdk.renderer.visitor.IDrawVisitor;
 
 /**
@@ -123,17 +126,16 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      * @param fontManager
      *            a class that manages mappings between zoom and font sizes
      */
-	public Renderer(List<IGenerator> generators, IFontManager fontManager) {
+	public Renderer(List<IAtomContainerGenerator> generators, IFontManager fontManager) {
         super(generators, fontManager);
     }
 	
-	public Renderer(List<IGenerator> generators, 
+	public Renderer(List<IAtomContainerGenerator> generators, 
 	                List<IReactionGenerator> reactionGenerators, 
 	                IFontManager fontManager) {
 	    this(generators, fontManager);
-//	    FIXME: register the IReactionGenerators too
-//        for (IGenerator generator : reactionGenerators)
-//            rendererModel.registerParameters(generator);
+        for (IReactionGenerator generator : reactionGenerators)
+            rendererModel.registerParameters(generator);
         this.reactionGenerators = reactionGenerators;
         this.setup();
 	}
@@ -251,7 +253,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	    this.scale = this.calculateScaleForBondLength(bondLength);
 
 	    // store the scale so that other components can access it
-	    this.rendererModel.setScale(scale);
+	    this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
 	}
 
 	/**
@@ -266,7 +268,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
-        this.rendererModel.setScale(scale);
+        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
     }
 
     /**
@@ -280,7 +282,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
-        this.rendererModel.setScale(scale);
+        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
     }
 
     /**
@@ -294,7 +296,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
-        this.rendererModel.setScale(scale);
+        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
     }
 
     /**
@@ -725,7 +727,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
 	public void setZoom(double z) {
-	    getRenderer2DModel().setZoomFactor( z );
+	    getRenderer2DModel().getRenderingParameter(
+		    ZoomFactor.class).setValue( z );
 	    zoom = z;
 	    setup();
 	}
@@ -775,7 +778,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.fontManager.setFontForZoom(zoom);
 
         // record the zoom in the model, so that generators can use it
-        this.rendererModel.setZoomFactor(zoom);
+        this.rendererModel.getRenderingParameter(
+    	    	ZoomFactor.class).setValue(zoom);
 
     }
 
@@ -815,7 +819,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            the bounding box of the model
 	 */
 	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    this.zoom = this.rendererModel.getZoomFactor();
+	    this.zoom = this.rendererModel.getRenderingParameter(
+		    	ZoomFactor.class).getValue();
         this.fontManager.setFontForZoom(zoom);
         this.setup();
 	}
@@ -863,7 +868,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 
 	    // set the scale in the renderer model for the generators
 	    if (reset) {
-	        this.rendererModel.setScale(scale);
+	        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
 	    }
 
 	    this.setup();
@@ -881,7 +886,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	    if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
             return Renderer.DEFAULT_SCALE;
         } else {
-            return this.rendererModel.getBondLength() / modelBondLength;
+            return this.rendererModel.getRenderingParameter(BondLength.class)
+        		.getValue() / modelBondLength;
         }
 	}
 
@@ -961,14 +967,14 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	    ElementGroup diagram = new ElementGroup();
         for (int i = 0; i < moleculeSet.getAtomContainerCount(); i++) {
             IAtomContainer ac = moleculeSet.getAtomContainer(i);
-            for (IGenerator generator : this.generators) {
+            for (IAtomContainerGenerator generator : this.generators) {
                 diagram.add(generator.generate(ac, this.rendererModel));
             }
         }
         return diagram;
 	}
 
-	public List<IGenerator> getGenerators(){
-	    return new ArrayList<IGenerator>(generators);
+	public List<IReactionGenerator> getReactionGenerators(){
+	    return new ArrayList<IReactionGenerator>(reactionGenerators);
 	}
 }

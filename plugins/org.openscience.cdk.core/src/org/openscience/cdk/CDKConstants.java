@@ -126,7 +126,7 @@ public class CDKConstants {
     public final static String NMRSHIFT_DEUTERIUM = "deuterium nmr shift";
 
 
-    /****************************************
+    /* **************************************
      * Some predefined flags - keep the     *
      * numbers below 50 free for other      *
      * purposes                             *
@@ -168,14 +168,10 @@ public class CDKConstants {
     /** Flag is set if an atom could be typed.
      */
     public static final int IS_TYPEABLE = 11;
-    /** Flag is set in JCP if an arrow indicating move
-     *  should be shown.
-     */
-    public static final int SHOW_MOVE_ARRAY = 12;
     /**
      * Maximum flags array index.
      */
-    public final static int MAX_FLAG_INDEX = 13;
+    public final static int MAX_FLAG_INDEX = 12;
     /**
      * Flag used for JUnit testing the pointer functionality.
      */
@@ -185,7 +181,7 @@ public class CDKConstants {
      */
     public final static int MAX_POINTER_INDEX = 1;
     
-    /****************************************
+    /* **************************************
      * Some predefined property names for    *
      * ChemObjects                           *
      ****************************************/
@@ -209,7 +205,7 @@ public class CDKConstants {
     public static final String DESCRIPTION = "cdk:Description";
 
 
-    /****************************************
+    /* **************************************
     * Some predefined property names for    *
     * Molecules                             *
     ****************************************/
@@ -251,7 +247,7 @@ public class CDKConstants {
     public static final String RELEVANT_RINGS = "cdk:RelevantRings";
 
     
-    /****************************************
+    /* **************************************
     * Some predefined property names for    *
     * Atoms                                 *
     ****************************************/
@@ -295,8 +291,10 @@ public class CDKConstants {
      */
     public static final String REST_H = "cdk:RestH";
 
+    public static final String ATOM_ATOM_MAPPING = "cdk:AtomAtomMapping";
 
-    /****************************************
+
+    /* **************************************
     * Some predefined property names for    *
     * AtomTypes                             *
     ****************************************/

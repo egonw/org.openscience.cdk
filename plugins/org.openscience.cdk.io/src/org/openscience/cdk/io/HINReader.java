@@ -20,18 +20,6 @@
  */
 package org.openscience.cdk.io;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.vecmath.Point3d;
-
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
@@ -47,6 +35,17 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.io.formats.HINFormat;
 import org.openscience.cdk.io.formats.IResourceFormat;
+
+import javax.vecmath.Point3d;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Reads an object from HIN formated input.
@@ -155,9 +154,9 @@ public class HINReader extends DefaultChemObjectReader {
      * @return A ChemFile containing the data parsed from input.
      */
     private IChemFile readChemFile(IChemFile file) {
-        IChemSequence chemSequence = file.getBuilder().newChemSequence();
-        IChemModel chemModel = file.getBuilder().newChemModel();
-        IMoleculeSet setOfMolecules = file.getBuilder().newMoleculeSet();
+        IChemSequence chemSequence = file.getBuilder().newInstance(IChemSequence.class);
+        IChemModel chemModel = file.getBuilder().newInstance(IChemModel.class);
+        IMoleculeSet setOfMolecules = file.getBuilder().newInstance(IMoleculeSet.class);
         String info;
 
         StringTokenizer tokenizer;
@@ -168,7 +167,7 @@ public class HINReader extends DefaultChemObjectReader {
             // read in header info
             while (true) {
                 line = input.readLine();
-                if (line.indexOf("mol ") == 0) {
+                if (line.startsWith("mol")) {
                     info = getMolName(line);
                     break;
                 }
@@ -179,13 +178,13 @@ public class HINReader extends DefaultChemObjectReader {
             line = input.readLine();
             while(true) {
                 if (line == null) break; // end of file
-                if (line.indexOf(';') == 0) continue; // comment line
+                if (line.startsWith(";")) continue; // comment line
 
-                if (line.indexOf("mol ") == 0) {
+                if (line.startsWith("mol")) {
                     info = getMolName(line);
                     line = input.readLine();
                 }
-                IMolecule m = file.getBuilder().newMolecule();
+                IMolecule m = file.getBuilder().newInstance(IMolecule.class);
                 m.setProperty(CDKConstants.TITLE ,info);
 
                 // Each element of cons is an ArrayList of length 3 which stores
@@ -197,10 +196,10 @@ public class HINReader extends DefaultChemObjectReader {
                 // read data for current molecule
                 int atomSerial = 0;
                 while (true) {
-                    if (line.indexOf("endmol ") >= 0) {
+                    if (line == null || line.contains("endmol")) {
                         break;
                     }
-                    if (line.indexOf(';') == 0) continue; // comment line
+                    if (line.startsWith(";")) continue; // comment line
 
                     tokenizer = new StringTokenizer(line, " ");
 
@@ -215,7 +214,7 @@ public class HINReader extends DefaultChemObjectReader {
                     double z = Double.parseDouble(toks[9]);
                     int nbond = Integer.parseInt(toks[10]);
 
-                    IAtom atom = file.getBuilder().newAtom(sym, new Point3d(x,y,z));
+                    IAtom atom = file.getBuilder().newInstance(IAtom.class,sym, new Point3d(x,y,z));
                     atom.setCharge(charge);
 
                     IBond.Order bo = IBond.Order.SINGLE;
@@ -254,10 +253,18 @@ public class HINReader extends DefaultChemObjectReader {
                     IAtom e = m.getAtom((Integer) ar.get(1));
                     IBond.Order bo = (IBond.Order) ar.get(2);
                     if (!isConnected(m, s, e))
-                        m.addBond(file.getBuilder().newBond(s, e, bo));
+                        m.addBond(file.getBuilder().newInstance(IBond.class,s, e, bo));
                 }
                 setOfMolecules.addMolecule(m);
-                line = input.readLine(); // read in the 'mol N'
+
+                // we may not get a 'mol N' immediately since
+                // the aromaticring keyword might be present
+                // and doesn't seem to be located within the molecule
+                // block
+                while (true) {
+                    line = input.readLine();
+                    if (line == null || line.startsWith("mol")) break;
+                }
             }
 
             // got all the molecule in the HIN file (hopefully!)

@@ -1,6 +1,4 @@
-/* $Revision$ $Author$ $Date$
- * 
- * Copyright (C) 2007  Niels Out <nielsout@users.sf.net>
+/* Copyright (C) 2007  Niels Out <nielsout@users.sf.net>
  * 
  * Contact: cdk-devel@lists.sourceforge.net or nout@science.uva.nl
  * 
@@ -29,76 +27,71 @@ package org.openscience.cdk.controller;
  * @cdk.module control
  */
 public interface IMouseEventRelay {
-    
+
     public void mouseWheelMovedBackward(int clicks);
-    
+
     public void mouseWheelMovedForward(int clicks);
-    
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseClickedUp(int screenCoordX, int screenCoordY);
-    
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseClickedDown(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
-	 * @param screenCoordX
-	 * @param screenCoordY
-	 */
-	public void mouseClickedUpRight(int screenCoordX, int screenCoordY);
-	
-	/**
-	 * 
-	 * @param screenCoordX
-	 * @param screenCoordY
-	 */
-	public void mouseClickedDownRight(int screenCoordX, int screenCoordY);
-	
-	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseClickedDouble(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseMove(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseEnter(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordX
 	 * @param screenCoordY
 	 */
 	public void mouseExit(int screenCoordX, int screenCoordY);
-	
+
 	/**
-	 * 
+	 *
 	 * @param screenCoordXFrom
 	 * @param screenCoordYFrom
 	 * @param screenCoordXTo
 	 * @param screenCoordYTo
 	 */
-	public void mouseDrag(int screenCoordXFrom, int screenCoordYFrom, 
-	        int screenCoordXTo, int screenCoordYTo);
-	
-	
+	public void mouseDrag(int screenCoordXFrom, int screenCoordYFrom, int screenCoordXTo, int screenCoordYTo);
+
+	/**
+	 * @param screenCoordX
+	 * @param screenCoordY
+	 */
+	public void mouseClickedDownRight(int screenCoordX, int screenCoordY);
+
+	/**
+	 * @param screenCoordX
+	 * @param screenCoordY
+	 */
+	public void mouseClickedUpRight(int screenCoordX, int screenCoordY);
 }

@@ -54,7 +54,7 @@ public class AddSingleElectron extends AbstractEdit {
 
     public void redo() {
         if(newElectron==null)
-            newElectron = atom.getBuilder().newSingleElectron( atom );
+            newElectron = atom.getBuilder().newInstance(ISingleElectron.class, atom);
 
         model.addSingleElectron( newElectron );
         updateHydrogenCount( atom );

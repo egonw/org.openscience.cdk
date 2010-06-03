@@ -110,22 +110,22 @@ public class AppendAtom extends AbstractEdit implements IEdit {
     private void init() {
         IAtom start;
         if(source==null) {
-            start = model.getBuilder().newAtom(symbol,pos);
+            start = model.getBuilder().newInstance(IAtom.class,symbol,pos);
             newSource = start;
         }
         else
             start = source;
 
         if(pos != null && source!=null)
-            newAtom = model.getBuilder().newAtom( symbol, pos );
+            newAtom = model.getBuilder().newInstance(IAtom.class,symbol, pos );
         else
-            newAtom = model.getBuilder().newAtom( symbol );
+            newAtom = model.getBuilder().newInstance(IAtom.class,symbol );
 
         if(newStereo!=null) {
-            newBond = model.getBuilder().newBond( start, newAtom ,
+            newBond = model.getBuilder().newInstance(IBond.class, start, newAtom ,
                                                   IBond.Order.SINGLE, newStereo);
         } else {
-            newBond = model.getBuilder().newBond( start, newAtom);
+            newBond = model.getBuilder().newInstance(IBond.class, start, newAtom);
         }
 
         if(pos==null) {
@@ -169,7 +169,7 @@ public class AppendAtom extends AbstractEdit implements IEdit {
             newAtomPoint.add( vec1 );
             atomToPlace.setPoint2d(newAtomPoint);
         } else if (connectedAtoms.size() == 1) {
-            IMolecule ac = model.getBuilder().newMolecule();
+            IMolecule ac = model.getBuilder().newInstance(IMolecule.class);
             ac.addAtom(sourceAtom);
             ac.addAtom(atomToPlace);
             Point2d distanceMeasure = new Point2d(0,0); // XXX not sure about this?
@@ -179,11 +179,11 @@ public class AppendAtom extends AbstractEdit implements IEdit {
                                                      distanceMeasure, true);
             atomPlacer.placeLinearChain(ac, v, bondLength);
         } else {
-            IMolecule placedAtoms = model.getBuilder().newMolecule();
+            IMolecule placedAtoms = model.getBuilder().newInstance(IMolecule.class);
             for (IAtom conAtom : connectedAtoms) placedAtoms.addAtom(conAtom);
             Point2d center2D = GeometryTools.get2DCenter(placedAtoms);
 
-            IAtomContainer unplacedAtoms = model.getBuilder().newAtomContainer();
+            IAtomContainer unplacedAtoms = model.getBuilder().newInstance(IAtomContainer.class);
             unplacedAtoms.addAtom(atomToPlace);
 
             atomPlacer.distributePartners( sourceAtom, placedAtoms, center2D,

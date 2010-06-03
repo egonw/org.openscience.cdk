@@ -79,7 +79,7 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 	public void redo() {
 		chemModel.getMoleculeSet().removeAtomContainer(movedContainer);
 		IReaction reaction = ReactionSetManipulator.getReactionByReactionID(chemModel.getReactionSet(), reactionID);
-		IMolecule mol=chemModel.getBuilder().newMolecule(movedContainer);
+		IMolecule mol=chemModel.getBuilder().newInstance(IMolecule.class, movedContainer);
 		mol.setID(movedContainer.getID());
 		if(reactantOrProduct)
 			reaction.addReactant(mol);
@@ -91,7 +91,7 @@ public class MakeReactantOrProductInExistingReactionEdit implements IUndoRedoabl
 
 	public void undo() {
 		if(chemModel.getMoleculeSet()==null)
-			chemModel.setMoleculeSet(chemModel.getBuilder().newMoleculeSet());
+			chemModel.setMoleculeSet(chemModel.getBuilder().newInstance(IMoleculeSet.class));
 		chemModel.getMoleculeSet().addAtomContainer(oldContainer);
 		IMoleculeSet reactantsorproducts;
 		if(reactantOrProduct)

@@ -106,7 +106,7 @@ public abstract class ShapeSelection implements IncrementalSelection {
         // you should really have used the isFilled method...
         if (atoms.size() == 0) return null;
         
-        IAtomContainer ac = atoms.get(0).getBuilder().newAtomContainer();
+        IAtomContainer ac = atoms.get(0).getBuilder().newInstance(IAtomContainer.class);
         for (IAtom atom : atoms) {
             ac.addAtom(atom);
         }

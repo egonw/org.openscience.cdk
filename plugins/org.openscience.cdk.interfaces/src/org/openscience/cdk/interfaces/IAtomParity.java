@@ -1,9 +1,4 @@
-/* $RCSfile$
- * $Author$
- * $Date$
- * $Revision$
- *
- * Copyright (C) 2006-2007  Egon Willighagen <egonw@users.sf.net>
+/* Copyright (C) 2006-2007  Egon Willighagen <egonw@users.sf.net>
  * 
  * Contact: cdk-devel@lists.sourceforge.net
  * 
@@ -39,7 +34,7 @@ package org.openscience.cdk.interfaces;
  * @cdk.keyword atom parity
  * @cdk.keyword stereochemistry
  */
-public interface IAtomParity extends Cloneable {
+public interface IAtomParity extends IStereoElement {
     
     /**
      * Returns the atom for which this parity is defined.

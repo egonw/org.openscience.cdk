@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CDK plugin
 Bundle-SymbolicName: org.openscience.cdk.forcefield;singleton:=true
-Bundle-Version: 1.3.4.0cdkjchempaint8
+Bundle-Version: 1.3.5.0bioclipse1
 Bundle-Vendor: The Chemistry Development Kit Project
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openscience.cdk.forcefield.Activator
@@ -21,7 +21,6 @@ Require-Bundle: org.openscience.cdk.annotation,
  javax.vecmath,
  org.eclipse.core.runtime
 Export-Package: org.openscience.cdk.charges,
- org.openscience.cdk.modeling.forcefield,
  org.openscience.cdk.modeling.builder3d,
  org.openscience.cdk.modeling.forcefield.data,
  org.openscience.cdk.forcefield

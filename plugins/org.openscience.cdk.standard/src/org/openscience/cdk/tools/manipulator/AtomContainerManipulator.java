@@ -27,6 +27,12 @@
  *  */
 package org.openscience.cdk.tools.manipulator;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
@@ -35,6 +41,7 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomParity;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IElectronContainer;
@@ -43,12 +50,7 @@ import org.openscience.cdk.interfaces.ILonePair;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IPseudoAtom;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.openscience.cdk.interfaces.IStereoElement;
 
 /**
  * Class with convenience methods that provide methods to manipulate
@@ -169,7 +171,7 @@ public class AtomContainerManipulator {
 			 throw new RuntimeException("Could not instantiate the IsotopeFactory.");
 		 }
         for (IAtom atom : atomContainer.atoms()) {
-            IElement isotopesElement = atom.getBuilder().newElement(atom.getSymbol());
+            IElement isotopesElement = atom.getBuilder().newInstance(IElement.class,atom.getSymbol());
             mass += factory.getNaturalMass(isotopesElement);
         }
 		 return mass;
@@ -267,11 +269,11 @@ public class AtomContainerManipulator {
                 Integer hCount = atom.getHydrogenCount();
                 if (hCount != null) {
                     for (int i = 0; i < hCount; i++) {
-                        IAtom hydrogen = atom.getBuilder().newAtom("H");
+                        IAtom hydrogen = atom.getBuilder().newInstance(IAtom.class,"H");
                         hydrogen.setAtomTypeName("H");
                         atomContainer.addAtom(hydrogen);
                         atomContainer.addBond(
-                                atom.getBuilder().newBond(
+                                atom.getBuilder().newInstance(IBond.class,
                                         atom, hydrogen,
                                         CDKConstants.BONDORDER_SINGLE
                                 )
@@ -325,7 +327,7 @@ public class AtomContainerManipulator {
         List<IAtom> remove = new ArrayList<IAtom>();  // lists removed Hs.
 
         // Clone atoms except those to be removed.
-        IMolecule mol = atomContainer.getBuilder().newMolecule();
+        IMolecule mol = atomContainer.getBuilder().newInstance(IMolecule.class);
         int count = atomContainer.getAtomCount();
         for (int i = 0;
                 i < count;
@@ -401,6 +403,10 @@ public class AtomContainerManipulator {
                 );
             }
         }
+        for(IAtom atom : mol.atoms()){
+            if(atom.getHydrogenCount()==null)
+                atom.setHydrogenCount(0);
+        }
         mol.setProperties(atomContainer.getProperties());
         mol.setFlags(atomContainer.getFlags());
 
@@ -449,7 +455,7 @@ public class AtomContainerManipulator {
 		// lists removed Hs.
 
 		// Clone atoms except those to be removed.
-		IMolecule mol = ac.getBuilder().newMolecule();
+		IMolecule mol = ac.getBuilder().newInstance(IMolecule.class);
 		int count = ac.getAtomCount();
 		for (int i = 0;
 				i < count;
@@ -571,7 +577,7 @@ public class AtomContainerManipulator {
     public static IAtomContainer getIntersection(
 		IAtomContainer container1, IAtomContainer container2)
 	{
-		IAtomContainer intersection = container1.getBuilder().newAtomContainer();
+		IAtomContainer intersection = container1.getBuilder().newInstance(IAtomContainer.class);
 
 		for (int i = 0; i < container1.getAtomCount(); i++)
 		{
@@ -827,5 +833,24 @@ public class AtomContainerManipulator {
 		}
 		return count;
 	}
+
+    /**
+     * Helper methods that works through the stereo elements of the given atom container
+     * and returns if the atom parity for the given atom, if one is defined.
+     *
+     * @param container {@link IAtomContainer} to search the {@link IAtomParity} for.
+     * @param atom      {@link IAtom} for which the {@link IAtomParity} must be defined.
+     * @return          the {@link IAtomParity} or null if none is define for the given atom.
+     */
+    @TestMethod("testGetAtomParity")
+    public static IAtomParity getAtomParity(IAtomContainer container, IAtom atom) {
+        for (IStereoElement element : container.stereoElements()) {
+            if (element instanceof IAtomParity) {
+                IAtomParity parity = (IAtomParity)element;
+                if (parity.getAtom() == atom) return parity;
+            }
+        }
+        return null;
+    }
 }
 

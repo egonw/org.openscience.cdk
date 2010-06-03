@@ -64,7 +64,7 @@ public class CreateRing extends AbstractEdit implements IEdit {
     public void redo() {
 
         if ( ringToAdd == null ) {
-            ringToAdd = model.getBuilder().newRing( ringSize );
+            ringToAdd = model.getBuilder().newInstance(IRing.class, ringSize );
             RingPlacer placer = new RingPlacer();
             placer.placeRing( ringToAdd, pos, 1.4 );
         }
