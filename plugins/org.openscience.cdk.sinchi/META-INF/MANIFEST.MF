@@ -14,9 +14,10 @@ Require-Bundle: org.openscience.cdk.annotation,
  org.openscience.cdk.standard,
  org.openscience.cdk.valencycheck,
  javax.vecmath,
- net.bioclipse.xom,
- net.sf.jniinchi,
- org.xmlcml.cmlxom,
+ net.sf.jniinchi.standard,
  org.eclipse.core.runtime
+Import-Package: nu.xom;version="1.0.0",
+ org.xmlcml.cml.base,
+ org.xmlcml.cml.element
 Export-Package: org.openscience.cdk.inchi.standard,
  org.openscience.cdk.sinchi
