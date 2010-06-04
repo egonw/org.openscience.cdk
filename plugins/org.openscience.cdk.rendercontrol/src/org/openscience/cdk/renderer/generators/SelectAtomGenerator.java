@@ -42,7 +42,7 @@ import org.openscience.cdk.renderer.selection.IncrementalSelection;
 /**
  * @cdk.module rendercontrol
  */
-public class SelectAtomGenerator implements IGenerator {
+public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
 
     public static class SelectionShape extends
     AbstractGeneratorParameter<Shape> {

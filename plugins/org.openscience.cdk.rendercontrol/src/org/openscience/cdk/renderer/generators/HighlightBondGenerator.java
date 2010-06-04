@@ -35,7 +35,7 @@ import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HoverOverC
  * @cdk.module rendercontrol
  */
 public class HighlightBondGenerator extends BasicBondGenerator 
-                                    implements IGenerator {
+                                    implements IGenerator<IAtomContainer> {
 
     public HighlightBondGenerator() {}
     

@@ -23,7 +23,6 @@ org/openscience/cdk/renderer/generators/BasicBondGenerator.java
 org/openscience/cdk/renderer/generators/BasicGenerator.java
 org/openscience/cdk/renderer/generators/BasicAtomGenerator.java
 org/openscience/cdk/renderer/generators/BasicSceneGenerator.java
-org/openscience/cdk/renderer/generators/IAtomContainerGenerator.java
 org/openscience/cdk/renderer/generators/RingGenerator.java
 org/openscience/cdk/renderer/AtomContainerRenderer.java
 org/openscience/cdk/renderer/selection/AbstractSelection.java

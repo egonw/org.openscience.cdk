@@ -38,7 +38,8 @@ import org.openscience.cdk.renderer.generators.IGenerator;
  *
  * @cdk.module controlbasic
  */
-public class PhantomBondGenerator extends BasicBondGenerator implements IGenerator{
+public class PhantomBondGenerator extends BasicBondGenerator
+    implements IGenerator<IAtomContainer> {
 
     ControllerHub hub;
 

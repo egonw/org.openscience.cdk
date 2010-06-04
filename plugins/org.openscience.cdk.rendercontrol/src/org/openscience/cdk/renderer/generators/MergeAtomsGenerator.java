@@ -37,7 +37,7 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
  * @cdk.module rendercontrol
  */
 public class MergeAtomsGenerator extends BasicAtomGenerator
-                                implements IGenerator {
+                                implements IGenerator<IAtomContainer> {
 
     public MergeAtomsGenerator() {}
 

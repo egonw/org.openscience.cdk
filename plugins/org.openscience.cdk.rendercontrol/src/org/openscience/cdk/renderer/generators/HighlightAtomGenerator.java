@@ -38,7 +38,7 @@ import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParame
  * @cdk.module rendercontrol
  */
 public class HighlightAtomGenerator extends BasicAtomGenerator 
-                                implements IGenerator {
+                                implements IGenerator<IAtomContainer> {
 
 	/**
 	 * The color used for drawing the part we are hovering over.

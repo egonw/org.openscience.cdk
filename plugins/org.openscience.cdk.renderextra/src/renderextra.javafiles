@@ -13,7 +13,6 @@ org/openscience/cdk/renderer/generators/AtomMassGenerator.java
 org/openscience/cdk/renderer/generators/RadicalGenerator.java
 org/openscience/cdk/renderer/generators/AtomNumberGenerator.java
 org/openscience/cdk/renderer/generators/ReactantsBoxGenerator.java
-org/openscience/cdk/renderer/generators/IReactionGenerator.java
 org/openscience/cdk/renderer/generators/AtomContainerBoundsGenerator.java
 org/openscience/cdk/renderer/generators/ReactionPlusGenerator.java
 org/openscience/cdk/renderer/generators/ReactionBoxGenerator.java

@@ -44,7 +44,7 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 /**
  * @cdk.module rendercontrol
  */
-public class ExternalHighlightGenerator implements IGenerator {
+public class ExternalHighlightGenerator implements IGenerator<IAtomContainer> {
 
     public ExternalHighlightGenerator() {}
 
