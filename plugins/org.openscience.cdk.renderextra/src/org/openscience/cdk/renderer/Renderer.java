@@ -183,13 +183,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.setup();
     }
 
-    public void reset() {
-        modelCenter = new Point2d(0, 0);
-        drawCenter = new Point2d(200, 200);
-        zoom = 1.0;
-        setup();
-    }
-
     /**
      * Determine the overlap of the diagram with the screen, and shift (if
      * necessary) the diagram draw center. It returns a rectangle only because
@@ -250,7 +243,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	 */
 	public void setScale(IChemModel chemModel) {
 	    double bondLength = Renderer.calculateAverageBondLength(chemModel);
-	    this.scale = this.calculateScaleForBondLength(bondLength);
+	    double scale = this.calculateScaleForBondLength(bondLength);
 
 	    // store the scale so that other components can access it
 	    this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
@@ -265,7 +258,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	 */
 	public void setScale(IReactionSet reactionSet) {
         double bondLength = Renderer.calculateAverageBondLength(reactionSet);
-        this.scale = this.calculateScaleForBondLength(bondLength);
+        double scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
         this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
@@ -279,7 +272,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      */
     public void setScale(IReaction reaction) {
         double bondLength = Renderer.calculateAverageBondLength(reaction);
-        this.scale = this.calculateScaleForBondLength(bondLength);
+        double scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
         this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
@@ -293,7 +286,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      */
     public void setScale(IMoleculeSet moleculeSet) {
         double bondLength = Renderer.calculateAverageBondLength(moleculeSet);
-        this.scale = this.calculateScaleForBondLength(bondLength);
+        double scale = this.calculateScaleForBondLength(bondLength);
 
         // store the scale so that other components can access it
         this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
@@ -729,7 +722,6 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	public void setZoom(double z) {
 	    getRenderer2DModel().getRenderingParameter(
 		    ZoomFactor.class).setValue( z );
-	    zoom = z;
 	    setup();
 	}
 
@@ -773,7 +765,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         double widthRatio  = drawWidth  / (diagramWidth  + (2 * m));
         double heightRatio = drawHeight / (diagramHeight + (2 * m));
 
-        this.zoom = Math.min(widthRatio, heightRatio);
+        double zoom = Math.min(widthRatio, heightRatio);
 
         this.fontManager.setFontForZoom(zoom);
 
@@ -819,7 +811,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
      *            the bounding box of the model
 	 */
 	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    this.zoom = this.rendererModel.getRenderingParameter(
+	    double zoom = this.rendererModel.getRenderingParameter(
 		    	ZoomFactor.class).getValue();
         this.fontManager.setFontForZoom(zoom);
         this.setup();
@@ -849,7 +841,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         this.setDrawCenter(
                 screenBounds.getCenterX(), screenBounds.getCenterY());
 
-        this.scale = this.calculateScaleForBondLength(bondLength);
+        double scale = this.calculateScaleForBondLength(bondLength);
 
         double drawWidth = screenBounds.getWidth();
         double drawHeight = screenBounds.getHeight();
@@ -867,9 +859,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         }
 
 	    // set the scale in the renderer model for the generators
-	    if (reset) {
 	        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
-	    }
 
 	    this.setup();
 	}
@@ -884,7 +874,7 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	 */
 	private double calculateScaleForBondLength(double modelBondLength) {
 	    if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
-            return Renderer.DEFAULT_SCALE;
+            return rendererModel.getRenderingParameter(Scale.class).getDefault();
         } else {
             return this.rendererModel.getRenderingParameter(BondLength.class)
         		.getValue() / modelBondLength;
@@ -905,6 +895,9 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
         double mw = modelBounds.getWidth();
         double mh = modelBounds.getHeight();
 
+        double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
+        double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
+        
         Point2d mc = this.toScreenCoordinates(cx, cy);
 
         // special case for 0 or 1 atoms
@@ -923,14 +916,15 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
 	}
 
 	private void setup() {
-
+	    double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
+      double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
         // set the transform
         try {
             this.transform = new AffineTransform();
             this.transform.translate(this.drawCenter.x, this.drawCenter.y);
             this.transform.scale(1,-1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
-            this.transform.scale(this.scale, this.scale);
-            this.transform.scale(this.zoom, this.zoom);
+            this.transform.scale(scale, scale);
+            this.transform.scale(zoom, zoom);
             this.transform.translate(-this.modelCenter.x, -this.modelCenter.y);
 //            System.err.println(String.format(
 //                    "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
@@ -944,8 +938,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
                     "null pointer when setting transform: " +
                     "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
                     this.drawCenter,
-                    this.scale,
-                    this.zoom,
+                    scale,
+                    zoom,
                     this.modelCenter));
         }
 	}
