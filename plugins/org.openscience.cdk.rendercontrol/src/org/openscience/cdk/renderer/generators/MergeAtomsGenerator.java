@@ -32,6 +32,7 @@ import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.path.PathBuilder;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HighlightAtomDistance;
 
 /**
  * @cdk.module rendercontrol
@@ -51,7 +52,9 @@ public class MergeAtomsGenerator extends BasicAtomGenerator
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
     	ElementGroup selectionElements = new ElementGroup();
-    	double radius = model.getHighlightDistance() /
+    	double mergeDistance = model.getRenderingParameter(
+    	                            HighlightAtomDistance.class).getValue(); 
+    	double radius = mergeDistance /
     	                model.getRenderingParameter(Scale.class).getValue();
     	radius /= 2.0;
     	for(IAtom atom : model.getMerge().keySet()){

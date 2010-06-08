@@ -19,6 +19,8 @@
 package org.openscience.cdk.renderer.generators;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.vecmath.Point2d;
 
@@ -30,6 +32,7 @@ import org.openscience.cdk.renderer.elements.IRenderingElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HoverOverColor;
+import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 
 /**
  * @cdk.module rendercontrol
@@ -37,6 +40,29 @@ import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HoverOverC
 public class HighlightBondGenerator extends BasicBondGenerator 
                                     implements IGenerator<IAtomContainer> {
 
+    /**
+     * The maximum distance on the screen the mouse pointer has to be to
+     * highlight a bond.
+     */
+    public static class HighlightBondDistance extends 
+                        AbstractGeneratorParameter<Double> {
+        public Double getDefault() {
+            return 8.0;
+        }
+    }
+    private HighlightBondDistance highlightBondDistance =
+    	new HighlightBondDistance();
+    
+    public static class HighlightBondShapeFilled extends 
+                        AbstractGeneratorParameter<Boolean> {
+        public Boolean getDefault() {
+            return Boolean.FALSE;
+        }
+    }
+    
+    private HighlightBondShapeFilled highlightBondShapeFilled =
+    	new HighlightBondShapeFilled();
+    
     public HighlightBondGenerator() {}
     
     private boolean shouldHighlight(IBond bond, RendererModel model) {
@@ -50,14 +76,25 @@ public class HighlightBondGenerator extends BasicBondGenerator
         if (bond != null && shouldHighlight(bond, model)) {
             super.ringSet = super.getRingSet(ac);
             
-            double r = model.getHighlightDistance() /
+            double r = model.getRenderingParameter(
+                    HighlightBondDistance.class).getValue() /
                        model.getRenderingParameter(Scale.class).getValue();
             Color hColor = model.getRenderingParameter(HoverOverColor.class).
             	getValue();
             Point2d p = bond.get2DCenter();
-            boolean filled = model.getHighlightShapeFilled();
+            boolean filled = model.getRenderingParameter(
+                    HighlightBondShapeFilled.class).getValue();
             return new OvalElement(p.x, p.y, r, filled, hColor);
         }
         return new ElementGroup();
+    }
+    
+    public List<IGeneratorParameter<?>> getParameters() {
+        return Arrays.asList(
+            new IGeneratorParameter<?>[] {
+                highlightBondDistance,
+                highlightBondShapeFilled
+            }
+        );
     }
 }

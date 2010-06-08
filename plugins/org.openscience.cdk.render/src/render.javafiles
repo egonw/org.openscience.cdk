@@ -4,7 +4,6 @@ org/openscience/cdk/renderer/color/CDK2DAtomColors.java
 org/openscience/cdk/renderer/color/CDKAtomColors.java
 org/openscience/cdk/renderer/color/RasmolColors.java
 org/openscience/cdk/renderer/color/CPKAtomColors.java
-org/openscience/cdk/renderer/RenderingParameters.java
 org/openscience/cdk/renderer/elements/IRenderingVisitor.java
 org/openscience/cdk/renderer/elements/TextElement.java
 org/openscience/cdk/renderer/elements/IRenderingElement.java

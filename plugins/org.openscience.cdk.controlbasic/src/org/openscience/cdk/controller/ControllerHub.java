@@ -71,6 +71,7 @@ import org.openscience.cdk.renderer.BoundsCalculator;
 import org.openscience.cdk.renderer.IRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HighlightAtomDistance;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 import org.openscience.cdk.tools.SaturationChecker;
@@ -438,7 +439,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
 		}
 		updateAtom(newAtom);
 		RendererModel model = this.getRenderer().getRenderer2DModel();
-		double nudgeDistance = model.getHighlightDistance() /
+		double nudgeDistance = model.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
 		    model.getRenderingParameter(Scale.class).getValue();
 		if (getClosestAtom(newAtom) != null)
 		    newAtom.getPoint2d().x += nudgeDistance;
@@ -527,7 +529,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         
         // shift the new atom a bit if it is in range of another atom
         RendererModel model = this.getRenderer().getRenderer2DModel();
-        double nudgeDistance = model.getHighlightDistance() /
+        double nudgeDistance = model.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
             model.getRenderingParameter(Scale.class).getValue();
         if (getClosestAtom(newAtom) != null)
         	newAtom.getPoint2d().x += nudgeDistance;
@@ -1124,7 +1127,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         updateAtoms(newRing, newRing.atoms());
         
         RendererModel rModel = this.getRenderer().getRenderer2DModel();
-        double d = rModel.getHighlightDistance() /
+        double d = rModel.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
             rModel.getRenderingParameter(Scale.class).getValue();
         for (IAtom newatom : newRing.atoms()) {
             if (atom != newatom && getClosestAtom(atom) != null) {
@@ -1183,7 +1187,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         for (IAtom newatom : newRing.atoms()) {
             if (atom != newatom && getClosestAtom(atom) != null) {
                 RendererModel rModel = this.getRenderer().getRenderer2DModel();
-                double d =  rModel.getHighlightDistance() /
+                double d =  rModel.getRenderingParameter(
+                        HighlightAtomDistance.class).getValue() /
                     rModel.getRenderingParameter(Scale.class).getValue();
                 atom.getPoint2d().x += d;
             }
@@ -1329,7 +1334,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         updateAtoms(newRing, newRing.atoms());
         
         RendererModel rModel = this.getRenderer().getRenderer2DModel();
-        double d =  rModel.getHighlightDistance() /
+        double d =  rModel.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
             rModel.getRenderingParameter(Scale.class).getValue();
         for(IAtom atom : newRing.atoms()){
         	if (atom != firstAtom && atom != secondAtom
@@ -1348,7 +1354,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
     public IAtom getAtomInRange(Collection<IAtom> toIgnore, IAtom atom) {
         Point2d atomPosition = atom.getPoint2d();
         RendererModel rModel = this.getRenderer().getRenderer2DModel();
-        double highlight = rModel.getHighlightDistance() /
+        double highlight = rModel.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
             rModel.getRenderingParameter(Scale.class).getValue();
         
         IAtom bestClosestAtom = null;
@@ -1449,7 +1456,8 @@ public class ControllerHub implements IMouseEventRelay, IChemModelRelay {
         updateAtoms(newRing, newRing.atoms());
         
         RendererModel rModel = this.getRenderer().getRenderer2DModel();
-        double d = rModel.getHighlightDistance() /
+        double d = rModel.getRenderingParameter(
+                HighlightAtomDistance.class).getValue()/
                    rModel.getRenderingParameter(Scale.class).getValue();
         for (IAtom atom : newRing.atoms()) {
         	if (atom != firstAtom 

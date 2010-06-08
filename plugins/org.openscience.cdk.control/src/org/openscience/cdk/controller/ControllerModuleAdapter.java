@@ -10,6 +10,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HighlightAtomDistance;
 import org.openscience.cdk.renderer.selection.AbstractSelection;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.SingleSelection;
@@ -28,7 +29,8 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 
 	public double getHighlightDistance() {
 	    RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-        return model.getHighlightDistance() /
+        return model.getRenderingParameter(
+                HighlightAtomDistance.class).getValue() /
                model.getRenderingParameter(Scale.class).getValue();
 	}
 

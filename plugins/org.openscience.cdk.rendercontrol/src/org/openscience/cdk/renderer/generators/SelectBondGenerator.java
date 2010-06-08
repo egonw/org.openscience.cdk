@@ -21,12 +21,15 @@
 package org.openscience.cdk.renderer.generators;
 
 import java.awt.Color;
-
+import java.util.Arrays;
+import java.util.List;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.elements.IRenderingElement;
+import org.openscience.cdk.renderer.generators.SelectAtomGenerator.SelectionRadius;
+import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 import org.openscience.cdk.renderer.selection.IChemObjectSelection;
 import org.openscience.cdk.renderer.selection.IncrementalSelection;
 
@@ -34,13 +37,22 @@ import org.openscience.cdk.renderer.selection.IncrementalSelection;
  * @cdk.module rendercontrol
  */
 public class SelectBondGenerator extends BasicBondGenerator {
+    
+    public static class SelectionBondColor extends 
+                        AbstractGeneratorParameter<Color> {
+        public Color getDefault() {
+            return Color.LIGHT_GRAY;
+        }
+    }
+    private SelectionBondColor selectionBondColor = new SelectionBondColor();
 
     private boolean autoUpdateSelection = true;
 
     public SelectBondGenerator() {}
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
-        Color selectionColor = model.getSelectedPartColor();
+        Color selectionColor = 
+            model.getRenderingParameter(SelectionBondColor.class).getValue();
         IChemObjectSelection selection = model.getSelection();
 
         ElementGroup selectionElements = new ElementGroup();
@@ -50,7 +62,9 @@ public class SelectBondGenerator extends BasicBondGenerator {
             IAtomContainer selectedAC = selection.getConnectedAtomContainer();
             if (selectedAC != null) {
             	super.setOverrideColor(selectionColor);
-            	super.setOverrideBondWidth(model.getSelectionRadius());
+            	super.setOverrideBondWidth(
+            	        model.getRenderingParameter(
+            	                SelectionRadius.class).getValue());
             	selectionElements.add(super.generate(selectedAC, model));
             }
         }
@@ -61,5 +75,13 @@ public class SelectBondGenerator extends BasicBondGenerator {
 				selectionElements.add(sel.generate(selectionColor));
 		}
         return selectionElements;
+    }
+    
+    public List<IGeneratorParameter<?>> getParameters() {
+        return Arrays.asList(
+                new IGeneratorParameter<?>[] {
+                        selectionBondColor
+                }
+        );
     }
 }

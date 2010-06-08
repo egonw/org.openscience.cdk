@@ -54,8 +54,6 @@ public class RendererModel implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -4420308906715213445L;
 
-    private RenderingParameters parameters;
-
     /* If true, the class will notify its listeners of changes */
     private boolean notification = true;
 
@@ -104,31 +102,10 @@ public class RendererModel implements Serializable, Cloneable {
     	new ColorHash();
 
     public RendererModel() {
-        this(new RenderingParameters());
-    }
-
-    public RendererModel(RenderingParameters parameters) {
-        this.parameters = parameters;
         renderingParameters.put(colorHash.getClass().getName(), colorHash);
         renderingParameters.put(
         	externalHighlightColor.getClass().getName(), externalHighlightColor
         );
-    }
-
-    public boolean getHighlightShapeFilled() {
-        return this.parameters.isHighlightShapeFilled();
-    }
-
-    public void setHighlightShapeFilled(boolean highlightShapeFilled) {
-        this.parameters.setHighlightShapeFilled(highlightShapeFilled);
-    }
-
-    public double getWedgeWidth() {
-        return this.parameters.getWedgeWidth();
-    }
-
-    public void setWedgeWidth(double wedgeWidth) {
-        this.parameters.setWedgeWidth(wedgeWidth);
     }
 
     public void setSelection(IChemObjectSelection selection) {
@@ -149,73 +126,6 @@ public class RendererModel implements Serializable, Cloneable {
 	public Map<IAtom, IAtom> getMerge() {
 		return merge;
 	}
-
-    public boolean getShowMoleculeTitle() {
-        return this.parameters.isShowMoleculeTitle();
-    }
-
-    public void setShowMoleculeTitle(boolean bool) {
-        this.parameters.setShowMoleculeTitle(bool);
-        fireChange();
-    }
-
-    public boolean isFitToScreen() {
-        return this.parameters.isFitToScreen();
-    }
-
-    public void setFitToScreen(boolean value) {
-        this.parameters.setFitToScreen(value);
-    }
-
-    /**
-     * Returns if the drawing of atom numbers is switched on for this model
-     *
-     * @return true if the drawing of atom numbers is switched on for this model
-     */
-    public boolean drawNumbers() {
-        return this.parameters.isWillDrawNumbers();
-    }
-
-    /**
-     * Sets if the drawing of atom numbers is switched on for this model.
-     *
-     * @param drawNumbers
-     *            true if the drawing of atom numbers is to be switched on for
-     *            this model
-     */
-    public void setDrawNumbers(boolean drawNumbers) {
-        this.parameters.setWillDrawNumbers(drawNumbers);
-        fireChange();
-    }
-
-    /**
-     * Returns true if atom numbers are drawn.
-     */
-    public boolean getDrawNumbers() {
-        return this.parameters.isWillDrawNumbers();
-    }
-
-    /**
-     * Returns the radius around an atoms, for which the atom is marked
-     * highlighted if a pointer device is placed within this radius.
-     *
-     * @return The highlight distance for all atoms (in screen space)
-     */
-    public double getHighlightDistance() {
-        return this.parameters.getHighlightDistance();
-    }
-
-    /**
-     * Sets the radius around an atoms, for which the atom is marked highlighted
-     * if a pointer device is placed within this radius.
-     *
-     * @param highlightDistance
-     *            the highlight radius of all atoms (in screen space)
-     */
-    public void setHighlightDistance(double highlightDistance) {
-        this.parameters.setHighlightDistance(highlightDistance);
-        fireChange();
-    }
 
     /**
      * Returns the atom currently highlighted.
@@ -337,26 +247,6 @@ public class RendererModel implements Serializable, Cloneable {
     }
 
     /**
-     * Sets the showTooltip attribute.
-     *
-     * @param showToolTip
-     *            The new value.
-     */
-    public void setShowTooltip(boolean showTooltip) {
-        this.parameters.setShowTooltip(showTooltip);
-        fireChange();
-    }
-
-    /**
-     * Gets showTooltip attribute.
-     *
-     * @return The showTooltip value.
-     */
-    public boolean getShowTooltip() {
-        return this.parameters.isShowTooltip();
-    }
-
-    /**
      * Sets the toolTipTextMap.
      *
      * @param map
@@ -376,23 +266,6 @@ public class RendererModel implements Serializable, Cloneable {
      */
     public Map<IAtom, String> getToolTipTextMap() {
         return toolTipTextMap;
-    }
-
-    /**
-     * Gets the color used for drawing the internally selected part.
-     */
-    public Color getSelectedPartColor() {
-        return this.parameters.getSelectedPartColor();
-    }
-
-    /**
-     * Sets the color used for drawing the internally selected part.
-     *
-     * @param selectedPartColor
-     *            The color
-     */
-    public void setSelectedPartColor(Color selectedPartColor) {
-        this.parameters.setSelectedPartColor(selectedPartColor);
     }
 
     /**
@@ -442,25 +315,6 @@ public class RendererModel implements Serializable, Cloneable {
         this.notification = notification;
     }
 
-    public boolean showAtomTypeNames() {
-        return this.parameters.isShowAtomTypeNames();
-    }
-
-    public void setShowAtomTypeNames(boolean showAtomTypeNames) {
-        this.parameters.setShowAtomTypeNames(showAtomTypeNames);
-    }
-
-	/**
-	 * @return the on screen radius of the selection element
-	 */
-	public double getSelectionRadius() {
-		return this.parameters.getSelectionRadius();
-	}
-
-	public void setSelectionRadius(double selectionRadius) {
-		this.parameters.setSelectionRadius(selectionRadius);
-	}
-
 	private Map<String,IGeneratorParameter<?>> renderingParameters =
 	        new HashMap<String,IGeneratorParameter<?>>();
 
@@ -488,7 +342,9 @@ public class RendererModel implements Serializable, Cloneable {
 	    if (renderingParameters.containsKey(param.getName()))
 	        return (T)renderingParameters.get(param.getName());
 	    try {
-            return param.newInstance();
+            return (T)new ReadOnlyRenderingParameterWrapper(
+            	param.newInstance()
+            );
         } catch (InstantiationException exception) {
             throw new RuntimeException(
                 "Could not instantiate a default " +
@@ -500,6 +356,72 @@ public class RendererModel implements Serializable, Cloneable {
                 param.getClass().getName(), exception
             );
         }
+	}
+
+	/**
+	 * Returns the default value for the {@link IGeneratorParameter} for the
+	 * active {@link IRenderer}.
+	 *
+	 * @param param {@link IGeneratorParameter} to get the value of.
+	 * @return the default value for which the type is defined by the provided
+	 *         {@link IGeneratorParameter}-typed <code>param</code> parameter.
+	 */
+	public <T extends IGeneratorParameter<S>,S> S
+	getDefaultRenderingParameter(Class<T> param) {
+		return getRenderingParameter(param).getDefault();
+	}
+
+	/**
+	 * Sets the {@link IGeneratorParameter} for the active {@link IRenderer}.
+	 * @param <T>
+	 *
+	 * @param param {@link IGeneratorParameter} to get the value of.
+	 * @return the {@link IGeneratorParameter} instance with the active value.
+	 */
+	public <T extends IGeneratorParameter<S>,S> void setRenderingParameter(
+			Class<T> paramType, S value) {
+		T parameter = getRenderingParameter(paramType);
+		parameter.setValue(value);
+	}
+
+	/**
+	 * Wrapper class that throws an {@link IllegalAccessError} when a new
+	 * value is set. This error is thrown to indicate the the returned
+	 * parameter is autogenerated and that setting the value will not be
+	 * reflected in any renderer model or generator.
+	 *
+	 * @param param {@link IGeneratorParameter} to be wrapped.
+	 */
+	class ReadOnlyRenderingParameterWrapper<T> implements IGeneratorParameter<T> {
+
+		private IGeneratorParameter<T> wrappedParameter;
+
+		public ReadOnlyRenderingParameterWrapper(IGeneratorParameter<T> param) {
+			this.wrappedParameter = param;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public T getDefault() {
+			return wrappedParameter.getDefault();
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public T getValue() {
+			return wrappedParameter.getValue();
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void setValue(T value) {
+			throw new IllegalAccessError(
+				"The RendererModel returned a new instance, and setting a " +
+				"value would not be reflected in the RendererModel. Did you " +
+				"make sure the IGeneratorParameter is registered, by " +
+				"registring the appropriate IGenerator?"
+			);
+		}
 	}
 
 	/**

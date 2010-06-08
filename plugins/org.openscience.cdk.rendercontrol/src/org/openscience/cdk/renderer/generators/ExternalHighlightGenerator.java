@@ -40,11 +40,25 @@ import org.openscience.cdk.renderer.elements.LineElement;
 import org.openscience.cdk.renderer.elements.OvalElement;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator.BondWidth;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.parameter.AbstractGeneratorParameter;
 
 /**
  * @cdk.module rendercontrol
  */
 public class ExternalHighlightGenerator implements IGenerator<IAtomContainer> {
+    
+    /**
+     * The maximum distance on the screen the mouse pointer has to be to
+     * highlight an external highlight.
+     */
+    public static class ExternalHighlightDistance extends 
+                        AbstractGeneratorParameter<Double> {
+        public Double getDefault() {
+            return 8.0;
+        }
+    }
+    private ExternalHighlightDistance externalHighlightDistance =
+    	new ExternalHighlightDistance();
 
     public ExternalHighlightGenerator() {}
 
@@ -64,7 +78,9 @@ public class ExternalHighlightGenerator implements IGenerator<IAtomContainer> {
 
     public IRenderingElement generate(IAtom atom, RendererModel model) {
         Point2d p = atom.getPoint2d();
-        double r = model.getHighlightDistance() /
+        double r = 
+            model.getRenderingParameter(
+                    ExternalHighlightDistance.class).getValue() /
                    model.getRenderingParameter(Scale.class).getValue();
         return new OvalElement(p.x, p.y, r,
         	model.getRenderingParameter(ExternalHighlightColor.class).getValue()
@@ -85,6 +101,7 @@ public class ExternalHighlightGenerator implements IGenerator<IAtomContainer> {
     public List<IGeneratorParameter<?>> getParameters() {
     	return Arrays.asList(
             new IGeneratorParameter<?>[] {
+                    externalHighlightDistance
             }
     	);
     }

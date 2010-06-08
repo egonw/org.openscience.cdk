@@ -46,6 +46,7 @@ import org.openscience.cdk.renderer.elements.TextElement;
 import org.openscience.cdk.renderer.elements.TextGroupElement;
 import org.openscience.cdk.renderer.elements.WedgeLineElement;
 import org.openscience.cdk.renderer.font.IFontManager;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator.WedgeWidth;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.ReactionSceneGenerator.ArrowHeadWidth;
 
@@ -106,7 +107,7 @@ public class SVGGenerator implements IDrawVisitor {
             new Vector2d(wedge.y1 - wedge.y2, wedge.x2 - wedge.x1);
         normal.normalize();
         normal.scale(
-        	rendererModel.getWedgeWidth() /
+            rendererModel.getRenderingParameter(WedgeWidth.class).getValue() /
         	rendererModel.getRenderingParameter(Scale.class).getValue()
         );  
         

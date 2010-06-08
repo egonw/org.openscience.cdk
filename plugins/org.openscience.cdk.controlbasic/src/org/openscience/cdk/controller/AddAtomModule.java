@@ -31,6 +31,7 @@ import javax.vecmath.Point2d;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
+import org.openscience.cdk.renderer.generators.HighlightAtomGenerator.HighlightAtomDistance;
 
 import static org.openscience.cdk.controller.edit.AddAtom.createAtom;
 import static org.openscience.cdk.controller.edit.SetSymbol.setSymbol;
@@ -53,8 +54,9 @@ public class AddAtomModule extends ControllerModuleAdapter {
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		
-		double dH = model.getHighlightDistance() /
-		            model.getRenderingParameter(Scale.class).getValue();
+		double dH = model.getRenderingParameter(
+		        HighlightAtomDistance.class).getValue() / 
+		        model.getRenderingParameter(Scale.class).getValue();
 		String atomType = 
 			chemModelRelay.getControlModel().getDrawElement();
 		

@@ -51,6 +51,28 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
     }
     private IGeneratorParameter<Color> hoverOverColor =
     	new HoverOverColor();
+    
+    /**
+     * The maximum distance on the screen the mouse pointer has to be to
+     * highlight an atom.
+     */
+    public static class HighlightAtomDistance extends 
+                        AbstractGeneratorParameter<Double> {
+        public Double getDefault() {
+            return 8.0;
+        }
+    }
+    private HighlightAtomDistance highlightAtomDistance =
+    	new HighlightAtomDistance();
+
+    public static class HighlightAtomShapeFilled extends 
+                        AbstractGeneratorParameter<Boolean> {
+        public Boolean getDefault() {
+            return Boolean.FALSE;
+        }
+    }
+    private HighlightAtomShapeFilled highlightAtomShapeFilled =
+    	new HighlightAtomShapeFilled();
 
     public HighlightAtomGenerator() {}
     
@@ -67,9 +89,12 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
             
             // the element size has to be scaled to model space 
             // so that it can be scaled back to screen space...
-            double radius = model.getHighlightDistance() /
+            double radius = 
+               model.getRenderingParameter(HighlightAtomDistance.class).getValue() /
                             model.getRenderingParameter(Scale.class).getValue();
-            boolean filled = model.getHighlightShapeFilled();
+            boolean filled = 
+                model.getRenderingParameter(
+                        HighlightAtomShapeFilled.class).getValue();
             Color highlightColor = hoverOverColor.getValue(); 
             return new OvalElement(p.x, p.y, radius, filled, highlightColor);
         }
@@ -80,7 +105,9 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
     public List<IGeneratorParameter<?>> getParameters() {
         return Arrays.asList(
             new IGeneratorParameter<?>[] {
-                hoverOverColor
+                hoverOverColor,
+                highlightAtomDistance,
+                highlightAtomShapeFilled
             }
         );
     }
