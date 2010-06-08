@@ -106,10 +106,6 @@ import org.openscience.cdk.renderer.visitor.IDrawVisitor;
  * @cdk.module renderbasic
  */
 public class AtomContainerRenderer implements IRenderer {
-    /**
-     * The default scale is used when the model is empty.
-     */
-    public static final double DEFAULT_SCALE = 30.0;
 
     protected IFontManager fontManager;
 
@@ -126,9 +122,7 @@ public class AtomContainerRenderer implements IRenderer {
 
     protected Point2d drawCenter = new Point2d(150, 200); //diagram on screen
 
-    protected double scale = DEFAULT_SCALE;
 
-    protected double zoom = 1.0;
 
     protected IRenderingElement cachedDiagram;
 
@@ -165,7 +159,7 @@ public class AtomContainerRenderer implements IRenderer {
     public void reset() {
         modelCenter = new Point2d(0, 0);
         drawCenter = new Point2d(200, 200);
-        zoom = 1.0;
+        rendererModel.getRenderingParameter(ZoomFactor.class).setValue(1.0);
         setup();
     }
 
@@ -228,10 +222,7 @@ public class AtomContainerRenderer implements IRenderer {
      */
     public void setScale(IAtomContainer atomContainer) {
         double bondLength = GeometryTools.getBondLengthAverage(atomContainer);
-        this.scale = this.calculateScaleForBondLength(bondLength);
-
-        // store the scale so that other components can access it
-        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
+        rendererModel.getRenderingParameter(Scale.class).setValue(this.calculateScaleForBondLength(bondLength));
     }
 
 	public Rectangle paint(
@@ -286,6 +277,8 @@ public class AtomContainerRenderer implements IRenderer {
 	}
 
 	public Rectangle calculateScreenBounds(Rectangle2D modelBounds) {
+	    double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
+	    double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
 	    double margin = this.rendererModel
 	        .getRenderingParameter(Margin.class).getValue();
         Point2d modelScreenCenter
@@ -360,7 +353,6 @@ public class AtomContainerRenderer implements IRenderer {
 	public void setZoom(double z) {
 		this.rendererModel.getRenderingParameter(
 		    	ZoomFactor.class).setValue( z );
-	    zoom = z;
 	    setup();
 	}
 
@@ -404,7 +396,7 @@ public class AtomContainerRenderer implements IRenderer {
         double widthRatio  = drawWidth  / (diagramWidth  + (2 * m));
         double heightRatio = drawHeight / (diagramHeight + (2 * m));
 
-        this.zoom = Math.min(widthRatio, heightRatio);
+        double zoom = Math.min(widthRatio, heightRatio);
 
         this.fontManager.setFontForZoom(zoom);
 
@@ -450,7 +442,7 @@ public class AtomContainerRenderer implements IRenderer {
      *            the bounding box of the model
 	 */
 	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    this.zoom = this.rendererModel.getRenderingParameter(
+	    double zoom = this.rendererModel.getRenderingParameter(
 	    	ZoomFactor.class).getValue();
         this.fontManager.setFontForZoom(zoom);
         this.setup();
@@ -480,7 +472,7 @@ public class AtomContainerRenderer implements IRenderer {
         this.setDrawCenter(
                 screenBounds.getCenterX(), screenBounds.getCenterY());
 
-        this.scale = this.calculateScaleForBondLength(bondLength);
+        double scale = this.calculateScaleForBondLength(bondLength);
 
         double drawWidth = screenBounds.getWidth();
         double drawHeight = screenBounds.getHeight();
@@ -498,9 +490,7 @@ public class AtomContainerRenderer implements IRenderer {
         }
 
 	    // set the scale in the renderer model for the generators
-	    if (reset) {
-	        this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
-	    }
+	    this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
 
 	    this.setup();
 	}
@@ -515,7 +505,7 @@ public class AtomContainerRenderer implements IRenderer {
 	 */
 	private double calculateScaleForBondLength(double modelBondLength) {
 	    if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
-            return DEFAULT_SCALE;
+            return rendererModel.getRenderingParameter(ZoomFactor.class).getDefault();
         } else {
             return this.rendererModel.getRenderingParameter(BondLength.class)
             	.getValue() / modelBondLength;
@@ -536,6 +526,8 @@ public class AtomContainerRenderer implements IRenderer {
         double mw = modelBounds.getWidth();
         double mh = modelBounds.getHeight();
 
+        double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
+        double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
         Point2d mc = this.toScreenCoordinates(cx, cy);
 
         // special case for 0 or 1 atoms
@@ -554,14 +546,15 @@ public class AtomContainerRenderer implements IRenderer {
 	}
 
 	private void setup() {
-
+	    double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
+      double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
         // set the transform
         try {
             this.transform = new AffineTransform();
             this.transform.translate(this.drawCenter.x, this.drawCenter.y);
             this.transform.scale(1,-1); // Converts between CDK Y-up & Java2D Y-down coordinate-systems
-            this.transform.scale(this.scale, this.scale);
-            this.transform.scale(this.zoom, this.zoom);
+            this.transform.scale(scale, scale);
+            this.transform.scale(zoom, zoom);
             this.transform.translate(-this.modelCenter.x, -this.modelCenter.y);
 //            System.err.println(String.format(
 //                    "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
@@ -575,8 +568,8 @@ public class AtomContainerRenderer implements IRenderer {
                     "null pointer when setting transform: " +
                     "drawCenter=%s scale=%s zoom=%s modelCenter=%s",
                     this.drawCenter,
-                    this.scale,
-                    this.zoom,
+                    scale,
+                    zoom,
                     this.modelCenter));
         }
 	}
