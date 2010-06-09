@@ -66,7 +66,7 @@ public class HighlightBondGenerator extends BasicBondGenerator
     public HighlightBondGenerator() {}
     
     private boolean shouldHighlight(IBond bond, RendererModel model) {
-        return !super.bindsHydrogen(bond) || model.getRenderingParameter(
+        return !super.bindsHydrogen(bond) || model.getParameter(
 			BasicAtomGenerator.ShowExplicitHydrogens.class
 		).getValue();
     }
@@ -76,13 +76,13 @@ public class HighlightBondGenerator extends BasicBondGenerator
         if (bond != null && shouldHighlight(bond, model)) {
             super.ringSet = super.getRingSet(ac);
             
-            double r = model.getRenderingParameter(
+            double r = model.getParameter(
                     HighlightBondDistance.class).getValue() /
-                       model.getRenderingParameter(Scale.class).getValue();
-            Color hColor = model.getRenderingParameter(HoverOverColor.class).
+                       model.getParameter(Scale.class).getValue();
+            Color hColor = model.getParameter(HoverOverColor.class).
             	getValue();
             Point2d p = bond.get2DCenter();
-            boolean filled = model.getRenderingParameter(
+            boolean filled = model.getParameter(
                     HighlightBondShapeFilled.class).getValue();
             return new OvalElement(p.x, p.y, r, filled, hColor);
         }

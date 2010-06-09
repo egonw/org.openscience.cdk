@@ -49,9 +49,9 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 
 	public void mouseClickedDown(Point2d worldCoord) {
 		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-		double dH = model.getRenderingParameter(
+		double dH = model.getParameter(
 		        HighlightAtomDistance.class).getValue() /
-		            model.getRenderingParameter(Scale.class).getValue();
+		            model.getParameter(Scale.class).getValue();
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 
 		if(closestAtom == null || closestAtom.getPoint2d().distance(worldCoord) > dH)
@@ -62,9 +62,9 @@ public class AtomAtomMappingModule extends ControllerModuleAdapter {
 	
 	public void mouseClickedUp(Point2d worldCoord){
 		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-		double dH = model.getRenderingParameter(
+		double dH = model.getParameter(
                 HighlightAtomDistance.class).getValue() /
-		            model.getRenderingParameter(Scale.class).getValue();
+		            model.getParameter(Scale.class).getValue();
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 
 		IAtom endAtom = null;

@@ -79,22 +79,22 @@ public class ExternalHighlightGenerator implements IGenerator<IAtomContainer> {
     public IRenderingElement generate(IAtom atom, RendererModel model) {
         Point2d p = atom.getPoint2d();
         double r = 
-            model.getRenderingParameter(
+            model.getParameter(
                     ExternalHighlightDistance.class).getValue() /
-                   model.getRenderingParameter(Scale.class).getValue();
+                   model.getParameter(Scale.class).getValue();
         return new OvalElement(p.x, p.y, r,
-        	model.getRenderingParameter(ExternalHighlightColor.class).getValue()
+        	model.getParameter(ExternalHighlightColor.class).getValue()
         );
     }
 
     public IRenderingElement generate(IBond bond, RendererModel model) {
         Point2d p1 = bond.getAtom(0).getPoint2d();
         Point2d p2 = bond.getAtom(1).getPoint2d();
-        double w = model.getRenderingParameter(BondWidth.class).getValue() /
-                   model.getRenderingParameter(Scale.class).getValue();
+        double w = model.getParameter(BondWidth.class).getValue() /
+                   model.getParameter(Scale.class).getValue();
         return new LineElement(
             p1.x, p1.y, p2.x, p2.y, w,
-            model.getRenderingParameter(ExternalHighlightColor.class).getValue()
+            model.getParameter(ExternalHighlightColor.class).getValue()
         );
     }
 

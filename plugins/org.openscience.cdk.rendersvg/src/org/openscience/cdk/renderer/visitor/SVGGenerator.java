@@ -107,8 +107,8 @@ public class SVGGenerator implements IDrawVisitor {
             new Vector2d(wedge.y1 - wedge.y2, wedge.x2 - wedge.x1);
         normal.normalize();
         normal.scale(
-            rendererModel.getRenderingParameter(WedgeWidth.class).getValue() /
-        	rendererModel.getRenderingParameter(Scale.class).getValue()
+            rendererModel.getParameter(WedgeWidth.class).getValue() /
+        	rendererModel.getParameter(Scale.class).getValue()
         );  
         
         // make the triangle corners
@@ -247,7 +247,7 @@ public class SVGGenerator implements IDrawVisitor {
     public void visit(ArrowElement line) {
       
         int w = (int) (line.width * 
-        	this.rendererModel.getRenderingParameter(Scale.class).getValue());
+        	this.rendererModel.getParameter(Scale.class).getValue());
         int[] a = this.transformPoint(line.x1, line.y1);
         int[] b = this.transformPoint(line.x2, line.y2);
         newline();
@@ -259,9 +259,9 @@ public class SVGGenerator implements IDrawVisitor {
 				b[0],
 				b[1]
 				));
-        double aW = rendererModel.getRenderingParameter(
+        double aW = rendererModel.getParameter(
         	ArrowHeadWidth.class
-        ).getValue() / rendererModel.getRenderingParameter(Scale.class).getValue();
+        ).getValue() / rendererModel.getParameter(Scale.class).getValue();
         if(line.direction){
 	        int[] c = this.transformPoint(line.x1-aW, line.y1-aW);
 	        int[] d = this.transformPoint(line.x1-aW, line.y1+aW);

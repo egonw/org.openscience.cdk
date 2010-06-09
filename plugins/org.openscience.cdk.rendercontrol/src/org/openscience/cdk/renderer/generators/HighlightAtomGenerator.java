@@ -77,7 +77,7 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
     public HighlightAtomGenerator() {}
     
     private boolean shouldHighlight(IAtom atom, RendererModel model) {
-        return !super.isHydrogen(atom) || model.getRenderingParameter(
+        return !super.isHydrogen(atom) || model.getParameter(
 			BasicAtomGenerator.ShowExplicitHydrogens.class
 		).getValue();
     }
@@ -90,10 +90,10 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
             // the element size has to be scaled to model space 
             // so that it can be scaled back to screen space...
             double radius = 
-               model.getRenderingParameter(HighlightAtomDistance.class).getValue() /
-                            model.getRenderingParameter(Scale.class).getValue();
+               model.getParameter(HighlightAtomDistance.class).getValue() /
+                            model.getParameter(Scale.class).getValue();
             boolean filled = 
-                model.getRenderingParameter(
+                model.getParameter(
                         HighlightAtomShapeFilled.class).getValue();
             Color highlightColor = hoverOverColor.getValue(); 
             return new OvalElement(p.x, p.y, radius, filled, highlightColor);

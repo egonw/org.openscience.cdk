@@ -54,9 +54,9 @@ public class AddAtomModule extends ControllerModuleAdapter {
 		IAtom closestAtom = chemModelRelay.getClosestAtom(worldCoord);
 		RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
 		
-		double dH = model.getRenderingParameter(
+		double dH = model.getParameter(
 		        HighlightAtomDistance.class).getValue() / 
-		        model.getRenderingParameter(Scale.class).getValue();
+		        model.getParameter(Scale.class).getValue();
 		String atomType = 
 			chemModelRelay.getControlModel().getDrawElement();
 		

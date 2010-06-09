@@ -29,9 +29,9 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 
 	public double getHighlightDistance() {
 	    RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-        return model.getRenderingParameter(
+        return model.getParameter(
                 HighlightAtomDistance.class).getValue() /
-               model.getRenderingParameter(Scale.class).getValue();
+               model.getParameter(Scale.class).getValue();
 	}
 
 	public static double distanceToAtom(IAtom atom, Point2d p) {

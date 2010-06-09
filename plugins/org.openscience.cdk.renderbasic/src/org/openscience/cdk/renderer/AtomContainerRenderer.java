@@ -107,6 +107,11 @@ import org.openscience.cdk.renderer.visitor.IDrawVisitor;
  */
 public class AtomContainerRenderer implements IRenderer {
 
+	/**
+	 * The default scale is used when the model is empty.
+	 */
+	public static final double DEFAULT_SCALE = 30.0;
+
     protected IFontManager fontManager;
 
 	/**
@@ -159,7 +164,7 @@ public class AtomContainerRenderer implements IRenderer {
     public void reset() {
         modelCenter = new Point2d(0, 0);
         drawCenter = new Point2d(200, 200);
-        rendererModel.getRenderingParameter(ZoomFactor.class).setValue(1.0);
+        rendererModel.getParameter(ZoomFactor.class).setValue(1.0);
         setup();
     }
 
@@ -222,7 +227,7 @@ public class AtomContainerRenderer implements IRenderer {
      */
     public void setScale(IAtomContainer atomContainer) {
         double bondLength = GeometryTools.getBondLengthAverage(atomContainer);
-        rendererModel.getRenderingParameter(Scale.class).setValue(this.calculateScaleForBondLength(bondLength));
+        rendererModel.getParameter(Scale.class).setValue(this.calculateScaleForBondLength(bondLength));
     }
 
 	public Rectangle paint(
@@ -277,10 +282,10 @@ public class AtomContainerRenderer implements IRenderer {
 	}
 
 	public Rectangle calculateScreenBounds(Rectangle2D modelBounds) {
-	    double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
-	    double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
+	    double scale = rendererModel.getParameter(Scale.class).getValue();
+	    double zoom = rendererModel.getParameter(ZoomFactor.class).getValue();
 	    double margin = this.rendererModel
-	        .getRenderingParameter(Margin.class).getValue();
+	        .getParameter(Margin.class).getValue();
         Point2d modelScreenCenter
             = this.toScreenCoordinates(modelBounds.getCenterX(),
                                        modelBounds.getCenterY());
@@ -351,7 +356,7 @@ public class AtomContainerRenderer implements IRenderer {
     }
 
 	public void setZoom(double z) {
-		this.rendererModel.getRenderingParameter(
+		this.rendererModel.getParameter(
 		    	ZoomFactor.class).setValue( z );
 	    setup();
 	}
@@ -390,7 +395,7 @@ public class AtomContainerRenderer implements IRenderer {
                              double diagramHeight) {
 
         double m = this.rendererModel
-            .getRenderingParameter(Margin.class).getValue();
+            .getParameter(Margin.class).getValue();
 
         // determine the zoom needed to fit the diagram to the screen
         double widthRatio  = drawWidth  / (diagramWidth  + (2 * m));
@@ -401,7 +406,7 @@ public class AtomContainerRenderer implements IRenderer {
         this.fontManager.setFontForZoom(zoom);
 
         // record the zoom in the model, so that generators can use it
-        this.rendererModel.getRenderingParameter(
+        this.rendererModel.getParameter(
     	    	ZoomFactor.class).setValue(zoom);
 
     }
@@ -422,10 +427,10 @@ public class AtomContainerRenderer implements IRenderer {
 	    this.cachedDiagram = diagram;
 
 	    this.fontManager.setFontName(
-	    	this.rendererModel.getRenderingParameter(FontName.class).getValue()
+	    	this.rendererModel.getParameter(FontName.class).getValue()
 	    );
 	    this.fontManager.setFontStyle(
-	    	this.rendererModel.getRenderingParameter(UsedFontStyle.class)
+	    	this.rendererModel.getParameter(UsedFontStyle.class)
 	    		.getValue()
 	    );
 
@@ -442,7 +447,7 @@ public class AtomContainerRenderer implements IRenderer {
      *            the bounding box of the model
 	 */
 	private void setupTransformNatural(Rectangle2D modelBounds) {
-	    double zoom = this.rendererModel.getRenderingParameter(
+	    double zoom = this.rendererModel.getParameter(
 	    	ZoomFactor.class).getValue();
         this.fontManager.setFontForZoom(zoom);
         this.setup();
@@ -484,13 +489,13 @@ public class AtomContainerRenderer implements IRenderer {
 
 	    // this controls whether editing a molecule causes it to re-center
 	    // with each change or not
-	    if (reset || rendererModel.getRenderingParameter(FitToScreen.class).getValue()) {
+	    if (reset || rendererModel.getParameter(FitToScreen.class).getValue()) {
             this.setModelCenter(
                     modelBounds.getCenterX(), modelBounds.getCenterY());
         }
 
 	    // set the scale in the renderer model for the generators
-	    this.rendererModel.getRenderingParameter(Scale.class).setValue(scale);
+	    this.rendererModel.getParameter(Scale.class).setValue(scale);
 
 	    this.setup();
 	}
@@ -505,9 +510,9 @@ public class AtomContainerRenderer implements IRenderer {
 	 */
 	private double calculateScaleForBondLength(double modelBondLength) {
 	    if (Double.isNaN(modelBondLength) || modelBondLength == 0) {
-            return rendererModel.getRenderingParameter(ZoomFactor.class).getDefault();
+            return DEFAULT_SCALE;
         } else {
-            return this.rendererModel.getRenderingParameter(BondLength.class)
+            return this.rendererModel.getParameter(BondLength.class)
             	.getValue() / modelBondLength;
         }
 	}
@@ -526,8 +531,8 @@ public class AtomContainerRenderer implements IRenderer {
         double mw = modelBounds.getWidth();
         double mh = modelBounds.getHeight();
 
-        double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
-        double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
+        double scale = rendererModel.getParameter(Scale.class).getValue();
+        double zoom = rendererModel.getParameter(ZoomFactor.class).getValue();
         Point2d mc = this.toScreenCoordinates(cx, cy);
 
         // special case for 0 or 1 atoms
@@ -536,7 +541,7 @@ public class AtomContainerRenderer implements IRenderer {
         }
 
         double margin = this.rendererModel
-            .getRenderingParameter(Margin.class).getValue();
+            .getParameter(Margin.class).getValue();
         int w = (int) ((scale * zoom * mw) + (2 * margin));
         int h = (int) ((scale * zoom * mh) + (2 * margin));
         int x = (int) (mc.x - w / 2);
@@ -546,8 +551,8 @@ public class AtomContainerRenderer implements IRenderer {
 	}
 
 	private void setup() {
-	    double scale = rendererModel.getRenderingParameter(Scale.class).getValue();
-      double zoom = rendererModel.getRenderingParameter(ZoomFactor.class).getValue();
+	    double scale = rendererModel.getParameter(Scale.class).getValue();
+      double zoom = rendererModel.getParameter(ZoomFactor.class).getValue();
         // set the transform
         try {
             this.transform = new AffineTransform();

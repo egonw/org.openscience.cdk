@@ -78,7 +78,7 @@ public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         Color selectionColor = 
-            model.getRenderingParameter(SelectionAtomColor.class).getValue();
+            model.getParameter(SelectionAtomColor.class).getValue();
         Shape shape = selectionShape.getValue();
         IChemObjectSelection selection = model.getSelection();
         ElementGroup selectionElements = new ElementGroup();
@@ -87,8 +87,8 @@ public class SelectAtomGenerator implements IGenerator<IAtomContainer> {
         	return selectionElements;
         if (this.autoUpdateSelection || selection.isFilled()) {
             double r = 
-                model.getRenderingParameter(SelectionRadius.class).getValue() /
-                model.getRenderingParameter(Scale.class).getValue();
+                model.getParameter(SelectionRadius.class).getValue() /
+                model.getParameter(Scale.class).getValue();
 
             double d = 2 * r;
             IAtomContainer selectedAC = selection.getConnectedAtomContainer();

@@ -45,7 +45,7 @@ public class ZoomModule extends ControllerModuleAdapter {
     
     private void zoom(double zoomFactor) {
         RendererModel model = chemModelRelay.getRenderer().getRenderer2DModel();
-        double zoom = model.getRenderingParameter(
+        double zoom = model.getParameter(
     	    	ZoomFactor.class).getValue();
         zoom = zoom * zoomFactor;
         if (zoom < .1 && zoom > 100)

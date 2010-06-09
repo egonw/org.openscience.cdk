@@ -52,7 +52,7 @@ public class SelectBondGenerator extends BasicBondGenerator {
 
     public IRenderingElement generate(IAtomContainer ac, RendererModel model) {
         Color selectionColor = 
-            model.getRenderingParameter(SelectionBondColor.class).getValue();
+            model.getParameter(SelectionBondColor.class).getValue();
         IChemObjectSelection selection = model.getSelection();
 
         ElementGroup selectionElements = new ElementGroup();
@@ -63,7 +63,7 @@ public class SelectBondGenerator extends BasicBondGenerator {
             if (selectedAC != null) {
             	super.setOverrideColor(selectionColor);
             	super.setOverrideBondWidth(
-            	        model.getRenderingParameter(
+            	        model.getParameter(
             	                SelectionRadius.class).getValue());
             	selectionElements.add(super.generate(selectedAC, model));
             }
