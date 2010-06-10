@@ -345,8 +345,9 @@ public class RendererModel implements Serializable, Cloneable {
 	    // the parameter was not registered yet, so we throw an exception to
 	    // indicate that the API is not used correctly.
 	    throw new IllegalAccessError(
-			"You requested the active parameter of the given type, but it " +
-			"has not been registered yet. Did you " +
+	    	"You requested the active parameter of type " +
+	    	param.getName() + ", but it " +
+	    	"has not been registered yet. Did you " +
 			"make sure the IGeneratorParameter is registered, by " +
 			"registring the appropriate IGenerator? Alternatively, " +
 			"you can use getDefault() to query the default value for " +

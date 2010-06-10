@@ -20,7 +20,7 @@
 package org.openscience.cdk.renderer.generators;
 
 import java.awt.Color;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.vecmath.Point2d;
@@ -103,12 +103,12 @@ public class HighlightAtomGenerator extends BasicAtomGenerator
     }
     
     public List<IGeneratorParameter<?>> getParameters() {
-        return Arrays.asList(
-            new IGeneratorParameter<?>[] {
-                hoverOverColor,
-                highlightAtomDistance,
-                highlightAtomShapeFilled
-            }
-        );
+    	List<IGeneratorParameter<?>> parameters =
+    		new ArrayList<IGeneratorParameter<?>>();
+    	parameters.add(hoverOverColor);
+    	parameters.add(highlightAtomDistance);
+    	parameters.add(highlightAtomShapeFilled);
+    	parameters.addAll(super.getParameters());
+    	return parameters;
     }
 }

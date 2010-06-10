@@ -19,7 +19,7 @@
 package org.openscience.cdk.renderer.generators;
 
 import java.awt.Color;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.vecmath.Point2d;
@@ -90,11 +90,11 @@ public class HighlightBondGenerator extends BasicBondGenerator
     }
     
     public List<IGeneratorParameter<?>> getParameters() {
-        return Arrays.asList(
-            new IGeneratorParameter<?>[] {
-                highlightBondDistance,
-                highlightBondShapeFilled
-            }
-        );
+    	List<IGeneratorParameter<?>> parameters =
+    		new ArrayList<IGeneratorParameter<?>>();
+    	parameters.add(highlightBondDistance);
+    	parameters.add(highlightBondShapeFilled);
+    	parameters.addAll(super.getParameters());
+    	return parameters;
     }
 }
