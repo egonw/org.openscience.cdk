@@ -48,6 +48,7 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator.Scale;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.UsedFontStyle;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator.ZoomFactor;
 import org.openscience.cdk.renderer.visitor.IDrawVisitor;
+import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 
 /**
  * A general renderer for {@link IChemModel}s, {@link IReaction}s, and
@@ -697,6 +698,8 @@ public class Renderer extends AtomContainerRenderer implements IRenderer {
     }
 
     public static double calculateAverageBondLength(IMoleculeSet moleculeSet) {
+        if(MoleculeSetManipulator.getBondCount(moleculeSet)==0)
+            return 1.4; //
         double averageBondModelLength = 0.0;
         for (IAtomContainer atomContainer : moleculeSet.molecules()) {
             averageBondModelLength +=
