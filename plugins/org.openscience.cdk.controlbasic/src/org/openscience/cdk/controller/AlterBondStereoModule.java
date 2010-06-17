@@ -56,6 +56,12 @@ public class AlterBondStereoModule extends ControllerModuleAdapter {
 		                ?IBond.Stereo.UP:IBond.Stereo.DOWN;
 	}
 
+	public AlterBondStereoModule(
+			IChemModelRelay chemModelRelay, IBond.Stereo stereo) {
+		super(chemModelRelay);
+		this.desiredDirection = stereo;
+	}
+
 	public void mouseClickedDown(Point2d worldCoord) {
 		IAtom atom = this.chemModelRelay.getClosestAtom(worldCoord);
 		IBond bond = this.chemModelRelay.getClosestBond(worldCoord);
