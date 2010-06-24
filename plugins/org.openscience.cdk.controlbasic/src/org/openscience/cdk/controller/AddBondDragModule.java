@@ -103,6 +103,7 @@ public class AddBondDragModule extends ControllerModuleAdapter {
             isBond = true;
             chemModelRelay.execute(cycleBondValence((IBond) singleSelection));
             setSelection(new SingleSelection<IChemObject>(singleSelection));
+            return;
         }
         start = new Point2d(source.getPoint2d());
     }
