@@ -140,8 +140,8 @@ public abstract class ControllerModuleAdapter implements IControllerModule {
 		IChemObjectSelection localSelection = rModel.getSelection();
 		IChemObject chemObject = getHighlighted(worldCoord, atom, bond);
 
-		if( chemObject!=null && localSelection!=null) {
-		    if(!localSelection.contains( chemObject ))
+		if( chemObject!=null ) {
+		    if( localSelection==null || !localSelection.contains( chemObject ))
 		        localSelection = new SingleSelection<IChemObject>(chemObject);
 		} else
 		    localSelection = AbstractSelection.EMPTY_SELECTION;
