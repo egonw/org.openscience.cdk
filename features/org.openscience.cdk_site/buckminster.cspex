@@ -6,7 +6,6 @@
 	<dependencies>
 		<dependency name="com.springsource.nu.xom" componentType="osgi.bundle" />
 		<dependency name="net.bioclipse.org.cmlxom" componentType="osgi.bundle"/>
-		<dependency name="com.springsource.org.apache.log4j" componentType="osgi.bundle" />
 		<dependency name="org.eclipse.swt" componentType="osgi.bundle" />
 	</dependencies>
 	<generators>
