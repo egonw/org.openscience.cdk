@@ -22,13 +22,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="org.openscience.cdk.annotation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.openscience.cdk.atomtype"
          download-size="0"
          install-size="0"
@@ -149,13 +142,6 @@
 
    <plugin
          id="org.openscience.cdk.io"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscience.cdk.ioformats"
          download-size="0"
          install-size="0"
          version="0.0.0"
