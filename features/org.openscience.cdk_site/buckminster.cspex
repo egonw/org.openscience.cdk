@@ -4,9 +4,8 @@
 	xmlns:bc="http://www.eclipse.org/buckminster/Common-1.0"
 	xmlns="http://www.eclipse.org/buckminster/CSpec-1.0">
 	<dependencies>
-		<dependency name="nu.xom" componentType="osgi.bundle" />
-		<dependency name="org.cmlxom" componentType="osgi.bundle"/>
-		<dependency name="com.springsource.org.apache.log4j" componentType="osgi.bundle" />
+		<dependency name="com.springsource.nu.xom" componentType="osgi.bundle" />
+		<dependency name="net.bioclipse.org.cmlxom" componentType="osgi.bundle"/>
 		<dependency name="org.eclipse.swt" componentType="osgi.bundle" />
 	</dependencies>
 	<generators>

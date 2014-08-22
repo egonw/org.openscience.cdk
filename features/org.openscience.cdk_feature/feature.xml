@@ -136,7 +136,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.openscience.cdk.inchi"
+         id="org.openscience.cdk.sinchi"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -186,13 +186,6 @@
 
    <plugin
          id="org.openscience.cdk.libiomd"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscience.cdk.log4j"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -381,12 +374,6 @@
          unpack="false"/>
 
    <plugin
-         id="net.sf.jniinchi"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.xmlpull.xpp3"
          download-size="0"
          install-size="0"
@@ -421,5 +408,12 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
+
+   <plugin
+         id="net.bioclipse.jniinchi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
